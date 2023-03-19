@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "138805132004",
+    "project_id": "food-frenz",
+    "storage_bucket": "food-frenz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138805132004:android:519826042a7288749e4af1",
+        "android_client_info": {
+          "package_name": "com.example.foodfrenz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138805132004-i4itj5d67trk3bmhtj9i0vn2i0dr3b37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcEDys45Hvnb2z00zL16KFTUkZqd4PnI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138805132004-i4itj5d67trk3bmhtj9i0vn2i0dr3b37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
