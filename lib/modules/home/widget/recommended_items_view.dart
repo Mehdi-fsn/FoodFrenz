@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/models/carte_item_model.dart';
 import 'package:foodfrenz/utils/constant/colors.dart';
-import 'package:foodfrenz/utils/constant/enum.dart';
+import 'package:foodfrenz/utils/functions/format.dart';
 import 'package:foodfrenz/utils/widgets/icon_and_text_widget.dart';
 
 class RecommendedItemsView extends StatefulWidget {
@@ -39,40 +40,63 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 325,
-      child: PageView.builder(
-          controller: _pageController,
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return _buildItem(widget.recommendedItems![index], index);
-          }),
+    return Column(
+      children: [
+        SizedBox(
+          height: 325,
+          child: PageView.builder(
+              controller: _pageController,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return _buildItem(widget.recommendedItems![index], index);
+              }),
+        ),
+        const SizedBox(height: 20),
+        DotsIndicator(
+          dotsCount: 5,
+          position: _currentPageValue,
+          decorator: DotsDecorator(
+            size: const Size.square(9.0),
+            activeSize: const Size(18.0, 9.0),
+            activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            activeColor: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.mainDarkColor
+                : AppColors.mainColor,
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildItem(CarteItemModel? item, int index) {
-    final String categoryToString = _formatCategory(item!.category);
+    final String categoryToString = Format.formatCategoryCarteItem(item!.category);
 
     // Transform the item based on the current page value
     Matrix4 matrix = Matrix4.identity();
-    if(index == _currentPageValue.floor()) {
-        var currentScale = 1 - (_currentPageValue - index) * (1 - _scaleFactor);
-        var currentTrans = _height4Transform * (1 - currentScale) / 2;
-        matrix = Matrix4.diagonal3Values(1, currentScale, 1);
-        matrix = Matrix4.diagonal3Values(1, currentScale, 1)..setTranslationRaw(0, currentTrans, 0);
-    } else if(index == _currentPageValue.floor() + 1) {
-        var currentScale = _scaleFactor + (_currentPageValue - index + 1) * (1 - _scaleFactor);
-        var currentTrans = _height4Transform * (1 - currentScale) / 2;
-        matrix = Matrix4.diagonal3Values(1, currentScale, 1);
-        matrix = Matrix4.diagonal3Values(1, currentScale, 1)..setTranslationRaw(0, currentTrans, 0);
-    } else if(index == _currentPageValue.floor() - 1) {
+    if (index == _currentPageValue.floor()) {
       var currentScale = 1 - (_currentPageValue - index) * (1 - _scaleFactor);
       var currentTrans = _height4Transform * (1 - currentScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currentScale, 1);
-      matrix = Matrix4.diagonal3Values(1, currentScale, 1)..setTranslationRaw(0, currentTrans, 0);
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1)
+        ..setTranslationRaw(0, currentTrans, 0);
+    } else if (index == _currentPageValue.floor() + 1) {
+      var currentScale =
+          _scaleFactor + (_currentPageValue - index + 1) * (1 - _scaleFactor);
+      var currentTrans = _height4Transform * (1 - currentScale) / 2;
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1);
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1)
+        ..setTranslationRaw(0, currentTrans, 0);
+    } else if (index == _currentPageValue.floor() - 1) {
+      var currentScale = 1 - (_currentPageValue - index) * (1 - _scaleFactor);
+      var currentTrans = _height4Transform * (1 - currentScale) / 2;
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1);
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1)
+        ..setTranslationRaw(0, currentTrans, 0);
     } else {
       var currentScale = _scaleFactor;
-      matrix = Matrix4.diagonal3Values(1, currentScale, 1)..setTranslationRaw(0, _height4Transform * (1 - _scaleFactor)/2, 1 );
+      matrix = Matrix4.diagonal3Values(1, currentScale, 1)
+        ..setTranslationRaw(0, _height4Transform * (1 - _scaleFactor) / 2, 1);
     }
 
     return Transform(
@@ -132,10 +156,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                   children: [
                     Text(
                       item.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
                     ),
                     const SizedBox(height: 7),
                     Row(
@@ -197,14 +218,5 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
         ]),
       ),
     );
-  }
-
-  String _formatCategory(CarteItemCategory category) {
-    switch (category) {
-      case CarteItemCategory.mainCourse:
-        return 'Main Course';
-      default:
-        return category.name[0].toUpperCase() + category.name.substring(1);
-    }
   }
 }

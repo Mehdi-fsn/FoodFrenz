@@ -5,6 +5,7 @@ import 'package:foodfrenz/data/bloc/theme/theme_bloc.dart';
 import 'package:foodfrenz/data/repositories/carte_items_repository.dart';
 import 'package:foodfrenz/models/carte_item_model.dart';
 import 'package:foodfrenz/modules/home/widget/recommended_items_view.dart';
+import 'package:foodfrenz/utils/constant/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,16 +21,15 @@ class HomeScreen extends StatelessWidget {
               margin: const EdgeInsets.only(top: 45.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     'FoodFrenz',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primaryContainer,
-                      fontFamily: 'Roboto',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.mainDarkColor
+                            : AppColors.mainColor,
+                        fontWeight: FontWeight.bold),
                   ),
                   BlocBuilder<ThemeBloc, ThemeState>(
                     builder: (context, state) {
@@ -47,9 +47,13 @@ class HomeScreen extends StatelessWidget {
                                         themeMode: ThemeMode.dark));
                             }
                           },
+                        backgroundColor: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.mainDarkColor
+                            : AppColors.mainColor,
                           child: Icon(state.themeMode == ThemeMode.dark
                               ? Icons.nightlight_outlined
-                              : Icons.sunny));
+                              : Icons.wb_sunny_outlined, color: Colors.black87),
+                      );
                     },
                   ),
                 ],
@@ -59,7 +63,8 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 20),
           FutureBuilder(
             future: Modular.get<CarteItemsRepository>().allCarteItems,
-            builder: (context, AsyncSnapshot<Map<String, List<CarteItemModel>>> snapshot) {
+            builder: (context,
+                AsyncSnapshot<Map<String, List<CarteItemModel>>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return SizedBox(
@@ -73,7 +78,9 @@ class HomeScreen extends StatelessWidget {
                     return const Center(child: Text("Error"));
                   } else {
                     return Column(children: [
-                      RecommendedItemsView(recommendedItems: snapshot.data!['recommended'],),
+                      RecommendedItemsView(
+                        recommendedItems: snapshot.data!['recommended'],
+                      ),
                       const SizedBox(height: 20),
                     ]);
                   }
