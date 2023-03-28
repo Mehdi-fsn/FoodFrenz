@@ -27,7 +27,7 @@ class HomeScreen extends GetView<HomeController> {
                   Text(
                     Strings.foodFrenz,
                     style: TextStyle(
-                        color: Get.theme.brightness == Brightness.dark
+                        color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.mainDarkColor
                             : AppColors.mainColor,
                         fontSize: Dimensions.textSize30,
@@ -38,11 +38,11 @@ class HomeScreen extends GetView<HomeController> {
                       Get.changeThemeMode(
                           Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
                     },
-                    backgroundColor: Get.theme.brightness == Brightness.dark
+                    backgroundColor: Get.isDarkMode
                         ? AppColors.mainDarkColor
                         : AppColors.mainColor,
                     child: Icon(
-                        Get.theme.brightness == Brightness.dark
+                        Get.isDarkMode
                             ? Icons.nightlight_outlined
                             : Icons.wb_sunny_outlined,
                         color: Colors.black87),
@@ -54,6 +54,7 @@ class HomeScreen extends GetView<HomeController> {
           SizedBox(height: Dimensions.height20),
           Column(
             children: [
+              //TODO: Add Future.wait to load all data at once
               FutureBuilder(
                   future: controller.recommendedItems,
                   builder: (BuildContext context,

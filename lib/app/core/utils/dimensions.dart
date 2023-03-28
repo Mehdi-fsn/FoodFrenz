@@ -26,6 +26,11 @@ class Dimensions {
   static double textSizeExtraLarge = 18.0.sp;
   static double textSize30 = 30.0.sp;
 
+  // Radius
+  static double radius5 = screenHeight / 173.4;
+  static double radius20 = screenHeight / 43.35;
+  static double radius30 = screenHeight / 28.9;
+
   // Home Screen
   static double homeRecommendedItemsView = screenHeight / 2.89;
   static double homeRecommendedItemsViewWhiteCard = screenHeight / 6.80;

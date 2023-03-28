@@ -20,9 +20,13 @@ class RecommendedItemsView extends StatefulWidget {
 
 class _RecommendedItemsViewState extends State<RecommendedItemsView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
+
+  final int _itemsNumber = 5;
+
+  // For transforming the items
   var _currentPageValue = 0.0;
   final _scaleFactor = 0.8;
-  final _height4Transform = Dimensions.homeRecommendedItemsView / 1.2;
+  final _height4Transform = Dimensions.homeRecommendedItemsView / 1.25;
 
   @override
   void initState() {
@@ -48,21 +52,21 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
           height: Dimensions.homeRecommendedItemsView,
           child: PageView.builder(
               controller: _pageController,
-              itemCount: 5,
+              itemCount: _itemsNumber,
               itemBuilder: (context, index) {
                 return _buildItemCard(widget.recommendedItems![index], index);
               }),
         ),
         SizedBox(height: Dimensions.height20),
         DotsIndicator(
-          dotsCount: 5,
+          dotsCount: _itemsNumber,
           position: _currentPageValue,
           decorator: DotsDecorator(
             size: const Size.square(9.0),
             activeSize: const Size(18.0, 9.0),
             activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            activeColor: Get.theme.brightness == Brightness.dark
+                borderRadius: BorderRadius.circular(Dimensions.radius5)),
+            activeColor: Get.isDarkMode
                 ? AppColors.mainDarkColor
                 : AppColors.mainColor,
           ),
@@ -102,7 +106,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
     return Transform(
       transform: matrix,
       child: Container(
-        margin: const EdgeInsets.only(right: 10, left: 10),
+        margin: EdgeInsets.only(right: Dimensions.width10, left: Dimensions.width10),
         child: Stack(children: [
           SizedBox(
             height: _height4Transform,
@@ -110,7 +114,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
               imageUrl: item.image,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(Dimensions.radius30),
                   image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.cover,
@@ -128,10 +132,10 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
             child: Container(
               width: double.infinity,
               height: Dimensions.homeRecommendedItemsViewWhiteCard,
-              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10, bottom: Dimensions.height10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(Dimensions.radius20),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
