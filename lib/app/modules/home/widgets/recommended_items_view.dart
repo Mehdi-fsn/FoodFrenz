@@ -3,7 +3,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
-import 'package:foodfrenz/app/core/utils/functions/format.dart';
+import 'package:foodfrenz/app/core/utils/format.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/widgets/icon_and_text_widget.dart';
 import 'package:get/get.dart';
@@ -66,9 +66,8 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
             activeSize: const Size(18.0, 9.0),
             activeShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radius5)),
-            activeColor: Get.isDarkMode
-                ? AppColors.mainDarkColor
-                : AppColors.mainColor,
+            activeColor:
+                Get.isDarkMode ? AppColors.mainDarkColor : AppColors.mainColor,
           ),
         ),
       ],
@@ -106,7 +105,8 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
     return Transform(
       transform: matrix,
       child: Container(
-        margin: EdgeInsets.only(right: Dimensions.width10, left: Dimensions.width10),
+        margin: EdgeInsets.only(
+            right: Dimensions.width10, left: Dimensions.width10),
         child: Stack(children: [
           SizedBox(
             height: _height4Transform,
@@ -132,7 +132,10 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
             child: Container(
               width: double.infinity,
               height: Dimensions.homeRecommendedItemsViewWhiteCard,
-              margin: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10, bottom: Dimensions.height10),
+              margin: EdgeInsets.only(
+                  left: Dimensions.width10,
+                  right: Dimensions.width10,
+                  bottom: Dimensions.height10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(Dimensions.radius20),

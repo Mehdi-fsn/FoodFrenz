@@ -22,7 +22,7 @@ class HomeScreen extends GetView<HomeController> {
               margin: EdgeInsets.only(top: Dimensions.height45),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     Strings.foodFrenz,
@@ -33,46 +33,94 @@ class HomeScreen extends GetView<HomeController> {
                         fontSize: Dimensions.textSize30,
                         fontWeight: FontWeight.bold),
                   ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      Get.changeThemeMode(
-                          Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-                    },
-                    backgroundColor: Get.isDarkMode
-                        ? AppColors.mainDarkColor
-                        : AppColors.mainColor,
-                    child: Icon(
-                        Get.isDarkMode
-                            ? Icons.nightlight_outlined
-                            : Icons.wb_sunny_outlined,
-                        color: Colors.black87),
+                  SizedBox(
+                    width: Dimensions.height45,
+                    height: Dimensions.height45,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Get.changeThemeMode(
+                            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                      },
+                      backgroundColor: Get.isDarkMode
+                          ? AppColors.mainDarkColor
+                          : AppColors.mainColor,
+                      child: Icon(
+                          Get.isDarkMode
+                              ? Icons.nightlight_outlined
+                              : Icons.wb_sunny_outlined,
+                          color: Colors.black87),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
           SizedBox(height: Dimensions.height20),
-          Column(
-            children: [
-              //TODO: Add Future.wait to load all data at once
-              FutureBuilder(
-                  future: controller.recommendedItems,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<CarteItemModel>> snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      default:
-                        return RecommendedItemsView(
-                          recommendedItems: snapshot.data,
-                        );
-                    }
-                  }),
-              SizedBox(height: Dimensions.height20),
-            ],
+          FutureBuilder(
+            future: controller.recommendedItems,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<CarteItemModel>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                default:
+                  return RecommendedItemsView(
+                    recommendedItems: snapshot.data,
+                  );
+              }
+            },
           ),
+          SizedBox(height: Dimensions.height30),
+          Padding(
+            padding: EdgeInsets.only(left: Dimensions.height20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  Strings.popular,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: Dimensions.textSizeLarge,
+                  ),
+                ),
+                SizedBox(width: Dimensions.width10),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 3),
+                  child: Text(
+                    ".",
+                    style: TextStyle(
+                      color: Colors.black26,
+                      fontSize: Dimensions.textSizeExtraLarge,
+                    ),
+                  ),
+                ),
+                SizedBox(width: Dimensions.width5),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 2),
+                  child: InkWell(
+                    splashColor: AppColors.mainColor,
+                    borderRadius: BorderRadius.circular(Dimensions.radius20),
+                    onTap: () {
+                      //TODO: Navigate to All Items
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: Dimensions.width3, right: Dimensions.width3),
+                      child: Text(
+                        Strings.seeAll,
+                        style: TextStyle(
+                          color: Colors.black26,
+                          fontSize: Dimensions.textSizeSmall,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
