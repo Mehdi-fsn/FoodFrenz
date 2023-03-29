@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/core/utils/format.dart';
@@ -20,8 +21,6 @@ class RecommendedItemsView extends StatefulWidget {
 
 class _RecommendedItemsViewState extends State<RecommendedItemsView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
-
-  final int _itemsNumber = 5;
 
   // For transforming the items
   var _currentPageValue = 0.0;
@@ -52,14 +51,14 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
           height: Dimensions.homeRecommendedItemsView,
           child: PageView.builder(
               controller: _pageController,
-              itemCount: _itemsNumber,
+              itemCount: Constants.recommendedItemsNumber,
               itemBuilder: (context, index) {
                 return _buildItemCard(widget.recommendedItems![index], index);
               }),
         ),
         SizedBox(height: Dimensions.height20),
         DotsIndicator(
-          dotsCount: _itemsNumber,
+          dotsCount: Constants.recommendedItemsNumber,
           position: _currentPageValue,
           decorator: DotsDecorator(
             size: const Size.square(9.0),
