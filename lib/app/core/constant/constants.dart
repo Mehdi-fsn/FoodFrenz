@@ -1,5 +1,4 @@
 class Constants {
-
   // Strings
   static const String foodFrenz = 'FoodFrenz';
   static const String popular = 'Popular';

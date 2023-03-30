@@ -165,9 +165,8 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                   children: [
                     Text(
                       item.name,
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: Dimensions.textSizeLarge),
+                      style:
+                          const TextStyle(color: Colors.black87, fontSize: 14),
                     ),
                     SizedBox(height: Dimensions.height10),
                     Row(
@@ -184,7 +183,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                                       ? Icons.star
                                       : Icons.star_border,
                                   color: AppColors.mainColor,
-                                  size: Dimensions.textSizeLarge,
+                                  size: Dimensions.iconSizeSmall,
                                 ),
                               ),
                             ),
@@ -213,19 +212,25 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                           icon: Icons.public,
                           text: item.origin,
                           textColor: AppColors.textColor,
+                          textSize: 14,
                           iconColor: AppColors.iconColor1,
+                          iconSize: 22,
                         ),
                         IconAndTextWidget(
                           icon: Icons.location_on,
                           text: '${item.distance.toString()}km',
                           textColor: AppColors.textColor,
+                          textSize: 14,
                           iconColor: AppColors.mainColor,
+                          iconSize: 22,
                         ),
                         IconAndTextWidget(
                           icon: Icons.access_time_rounded,
                           text: '${(19 * item.distance + 10).round()}min',
                           textColor: AppColors.textColor,
+                          textSize: 14,
                           iconColor: AppColors.iconColor2,
+                          iconSize: 22,
                         ),
                       ],
                     )

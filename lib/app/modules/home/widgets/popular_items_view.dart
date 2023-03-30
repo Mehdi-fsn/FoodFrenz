@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/constant/constants.dart';
+import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 
@@ -55,11 +56,68 @@ class PopularItemsView extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: Dimensions.width5),
+              padding: EdgeInsets.symmetric(vertical: Dimensions.width15),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  color: Colors.green,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(Dimensions.radius20),
+                    bottomRight: Radius.circular(Dimensions.radius20),
+                  ),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(Dimensions.width10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: Dimensions.textSizeDefault),
+                      ),
+                      Text(item.description,
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: Dimensions.textSizeSmall,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: List.generate(
+                              5,
+                              (index) => Icon(
+                                index < item.notes.round()
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: AppColors.mainColor,
+                                size: Dimensions.iconSizeExtraSmall,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: Dimensions.width5),
+                          Text(
+                            item.notes.toString(),
+                            style: TextStyle(
+                                color: AppColors.textColor,
+                                fontSize: Dimensions.textSize11),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

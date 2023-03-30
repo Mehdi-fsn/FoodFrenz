@@ -4,6 +4,7 @@ import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/modules/home/home_controller.dart';
+import 'package:foodfrenz/app/modules/home/pages/all_carte_item_page.dart';
 import 'package:foodfrenz/app/modules/home/widgets/popular_items_view.dart';
 import 'package:foodfrenz/app/modules/home/widgets/recommended_items_view.dart';
 import 'package:get/get.dart';
@@ -126,7 +127,7 @@ class HomeScreen extends GetView<HomeController> {
                   : AppColors.mainColor,
               borderRadius: BorderRadius.circular(Dimensions.radius20),
               onTap: () {
-                //TODO: Navigate to All Items
+                Get.to(() => const AllCarteItemsPage());
               },
               child: Padding(
                 padding: EdgeInsets.only(
