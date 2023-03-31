@@ -165,8 +165,9 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                   children: [
                     Text(
                       item.name,
-                      style:
-                          const TextStyle(color: Colors.black87, fontSize: 14),
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: Dimensions.textSizeLarge),
                     ),
                     SizedBox(height: Dimensions.height10),
                     Row(
@@ -197,7 +198,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                           ],
                         ),
                         Text(
-                          '${Format.formatNumber(item.comments)} comments',
+                          '${Format.formatNumber(item.comments)} ${Constants.comments}',
                           style: TextStyle(
                               color: AppColors.textColor,
                               fontSize: Dimensions.textSize11),
@@ -212,25 +213,20 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                           icon: Icons.public,
                           text: item.origin,
                           textColor: AppColors.textColor,
-                          textSize: 14,
                           iconColor: AppColors.iconColor1,
-                          iconSize: 22,
                         ),
                         IconAndTextWidget(
                           icon: Icons.location_on,
-                          text: '${item.distance.toString()}km',
+                          text: '${item.distance.toString()}${Constants.km}',
                           textColor: AppColors.textColor,
-                          textSize: 14,
                           iconColor: AppColors.mainColor,
-                          iconSize: 22,
                         ),
                         IconAndTextWidget(
                           icon: Icons.access_time_rounded,
-                          text: '${(19 * item.distance + 10).round()}min',
+                          text:
+                              '${(19 * item.distance + 10).round()}${Constants.min}',
                           textColor: AppColors.textColor,
-                          textSize: 14,
                           iconColor: AppColors.iconColor2,
-                          iconSize: 22,
                         ),
                       ],
                     )

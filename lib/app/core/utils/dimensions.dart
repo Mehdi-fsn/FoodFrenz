@@ -12,6 +12,7 @@ class Dimensions {
   static double height20 = screenHeight / 43.35;
   static double height30 = screenHeight / 28.9;
   static double height45 = screenHeight / 19.26;
+  static double height50 = screenHeight / 17.34;
   static double height130 = screenHeight / 6.66;
 
   // Width based on Pixel 6 Pro (411 pixels)
@@ -19,6 +20,7 @@ class Dimensions {
   static double width5 = screenWidth / 82.2;
   static double width10 = screenWidth / 41.1;
   static double width15 = screenWidth / 27.4;
+  static double width20 = screenWidth / 20.55;
   static double width45 = screenWidth / 9.13;
 
   // Text Size

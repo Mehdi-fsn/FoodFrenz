@@ -12,12 +12,12 @@ class HomeController extends GetxController {
   HomeController({required HomeRepository homeRepository})
       : _homeRepository = homeRepository;
 
-  final appetizersItems = <CarteItemModel>[].obs;
-  final mainCoursesItems = <CarteItemModel>[].obs;
-  final dessertsItems = <CarteItemModel>[].obs;
+  final appetizerItems = <CarteItemModel>[].obs;
+  final mainCourseItems = <CarteItemModel>[].obs;
+  final dessertItems = <CarteItemModel>[].obs;
 
   List<CarteItemModel> get allItems =>
-      [...appetizersItems, ...mainCoursesItems, ...dessertsItems];
+      [...appetizerItems, ...mainCourseItems, ...dessertItems];
 
   StreamSubscription<List<CarteItemModel>>? _appetizersSubscription;
   StreamSubscription<List<CarteItemModel>>? _mainCoursesSubscription;
@@ -27,13 +27,13 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _appetizersSubscription = _homeRepository.getAppetizers().listen((items) {
-      appetizersItems.value = items;
+      appetizerItems.value = items;
     });
     _mainCoursesSubscription = _homeRepository.getMainCourses().listen((items) {
-      mainCoursesItems.value = items;
+      mainCourseItems.value = items;
     });
     _dessertsSubscription = _homeRepository.getDesserts().listen((items) {
-      dessertsItems.value = items;
+      dessertItems.value = items;
     });
   }
 

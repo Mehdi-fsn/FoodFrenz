@@ -7,6 +7,7 @@ import 'package:foodfrenz/app/modules/home/home_controller.dart';
 import 'package:foodfrenz/app/modules/home/pages/all_carte_item_page.dart';
 import 'package:foodfrenz/app/modules/home/widgets/popular_items_view.dart';
 import 'package:foodfrenz/app/modules/home/widgets/recommended_items_view.dart';
+import 'package:foodfrenz/app/widgets/screen_base.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -14,50 +15,45 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScreenBase(
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Header
             Padding(
-              padding: EdgeInsets.only(
-                  right: Dimensions.height20, left: Dimensions.height20),
-              child: Container(
-                margin: EdgeInsets.only(top: Dimensions.height45),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      Constants.foodFrenz,
-                      style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.mainDarkColor
-                              : AppColors.mainColor,
-                          fontSize: Dimensions.textSize30,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: Dimensions.height45,
-                      height: Dimensions.height45,
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          Get.changeThemeMode(Get.isDarkMode
-                              ? ThemeMode.light
-                              : ThemeMode.dark);
-                        },
-                        backgroundColor: Get.isDarkMode
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    Constants.foodFrenz,
+                    style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.mainDarkColor
                             : AppColors.mainColor,
-                        child: Icon(
-                            Get.isDarkMode
-                                ? Icons.nightlight_outlined
-                                : Icons.wb_sunny_outlined,
-                            color: Colors.black87),
-                      ),
+                        fontSize: Dimensions.textSize30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: Dimensions.height45,
+                    height: Dimensions.height45,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Get.changeThemeMode(
+                            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                      },
+                      backgroundColor: Get.isDarkMode
+                          ? AppColors.mainDarkColor
+                          : AppColors.mainColor,
+                      child: Icon(
+                          Get.isDarkMode
+                              ? Icons.nightlight_outlined
+                              : Icons.wb_sunny_outlined,
+                          color: Colors.black87),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: Dimensions.height20),
@@ -127,7 +123,7 @@ class HomeScreen extends GetView<HomeController> {
                   : AppColors.mainColor,
               borderRadius: BorderRadius.circular(Dimensions.radius20),
               onTap: () {
-                Get.to(() => const AllCarteItemsPage());
+                Get.to(() => AllCarteItemsPage());
               },
               child: Padding(
                 padding: EdgeInsets.only(
