@@ -1,12 +1,15 @@
+import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/data/enums.dart';
 
 class Format {
   static String formatCategoryCarteItemToString(CarteItemCategory category) {
     switch (category) {
+      case CarteItemCategory.appetizer:
+        return Constants.appetizers;
       case CarteItemCategory.mainCourse:
-        return 'Main Course';
-      default:
-        return category.name[0].toUpperCase() + category.name.substring(1);
+        return Constants.mainCourses;
+      case CarteItemCategory.dessert:
+        return Constants.desserts;
     }
   }
 

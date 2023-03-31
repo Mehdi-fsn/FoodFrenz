@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
-import 'package:foodfrenz/app/core/utils/functions/format.dart';
+import 'package:foodfrenz/app/core/utils/format.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/widgets/icon_and_text_widget.dart';
 import 'package:get/get.dart';
@@ -20,9 +21,11 @@ class RecommendedItemsView extends StatefulWidget {
 
 class _RecommendedItemsViewState extends State<RecommendedItemsView> {
   final PageController _pageController = PageController(viewportFraction: 0.85);
+
+  // For transforming the items
   var _currentPageValue = 0.0;
   final _scaleFactor = 0.8;
-  final _height4Transform = Dimensions.homeRecommendedItemsView / 1.2;
+  final _height4Transform = Dimensions.homeRecommendedItemsView / 1.25;
 
   @override
   void initState() {
@@ -48,23 +51,22 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
           height: Dimensions.homeRecommendedItemsView,
           child: PageView.builder(
               controller: _pageController,
-              itemCount: 5,
+              itemCount: Constants.recommendedItemsNumber,
               itemBuilder: (context, index) {
                 return _buildItemCard(widget.recommendedItems![index], index);
               }),
         ),
         SizedBox(height: Dimensions.height20),
         DotsIndicator(
-          dotsCount: 5,
+          dotsCount: Constants.recommendedItemsNumber,
           position: _currentPageValue,
           decorator: DotsDecorator(
             size: const Size.square(9.0),
             activeSize: const Size(18.0, 9.0),
             activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            activeColor: Get.theme.brightness == Brightness.dark
-                ? AppColors.mainDarkColor
-                : AppColors.mainColor,
+                borderRadius: BorderRadius.circular(Dimensions.radius5)),
+            activeColor:
+                Get.isDarkMode ? AppColors.mainDarkColor : AppColors.mainColor,
           ),
         ),
       ],
@@ -102,7 +104,8 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
     return Transform(
       transform: matrix,
       child: Container(
-        margin: const EdgeInsets.only(right: 10, left: 10),
+        margin: EdgeInsets.only(
+            right: Dimensions.width10, left: Dimensions.width10),
         child: Stack(children: [
           SizedBox(
             height: _height4Transform,
@@ -110,7 +113,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
               imageUrl: item.image,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(Dimensions.radius30),
                   image: DecorationImage(
                     image: imageProvider,
                     fit: BoxFit.cover,
@@ -128,10 +131,13 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
             child: Container(
               width: double.infinity,
               height: Dimensions.homeRecommendedItemsViewWhiteCard,
-              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: EdgeInsets.only(
+                  left: Dimensions.width10,
+                  right: Dimensions.width10,
+                  bottom: Dimensions.height10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(Dimensions.radius20),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
@@ -178,7 +184,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                                       ? Icons.star
                                       : Icons.star_border,
                                   color: AppColors.mainColor,
-                                  size: Dimensions.textSizeLarge,
+                                  size: Dimensions.iconSizeSmall,
                                 ),
                               ),
                             ),
@@ -192,7 +198,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                           ],
                         ),
                         Text(
-                          '${Format.formatNumber(item.comments)} comments',
+                          '${Format.formatNumber(item.comments)} ${Constants.comments}',
                           style: TextStyle(
                               color: AppColors.textColor,
                               fontSize: Dimensions.textSize11),
@@ -211,13 +217,14 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
                         ),
                         IconAndTextWidget(
                           icon: Icons.location_on,
-                          text: '${item.distance.toString()}km',
+                          text: '${item.distance.toString()}${Constants.km}',
                           textColor: AppColors.textColor,
                           iconColor: AppColors.mainColor,
                         ),
                         IconAndTextWidget(
                           icon: Icons.access_time_rounded,
-                          text: '${(19 * item.distance + 10).round()}min',
+                          text:
+                              '${(19 * item.distance + 10).round()}${Constants.min}',
                           textColor: AppColors.textColor,
                           iconColor: AppColors.iconColor2,
                         ),
