@@ -4,10 +4,9 @@ import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/modules/home/home_controller.dart';
-import 'package:foodfrenz/app/modules/home/pages/all_carte_item_page.dart';
-import 'package:foodfrenz/app/modules/home/widgets/popular_items_view.dart';
-import 'package:foodfrenz/app/modules/home/widgets/recommended_items_view.dart';
-import 'package:foodfrenz/app/widgets/screen_base.dart';
+import 'package:foodfrenz/app/modules/home/widgets/views/popular_items_view.dart';
+import 'package:foodfrenz/app/modules/home/widgets/views/recommended_items_view.dart';
+import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -15,76 +14,83 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenBase(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    Constants.foodFrenz,
-                    style: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      Constants.foodFrenz,
+                      style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.mainDarkColor
+                              : AppColors.mainColor,
+                          fontSize: Dimensions.textSize30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      width: Dimensions.height45,
+                      height: Dimensions.height45,
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          Get.changeThemeMode(Get.isDarkMode
+                              ? ThemeMode.light
+                              : ThemeMode.dark);
+                        },
+                        backgroundColor: Get.isDarkMode
                             ? AppColors.mainDarkColor
                             : AppColors.mainColor,
-                        fontSize: Dimensions.textSize30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    width: Dimensions.height45,
-                    height: Dimensions.height45,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Get.changeThemeMode(
-                            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-                      },
-                      backgroundColor: Get.isDarkMode
-                          ? AppColors.mainDarkColor
-                          : AppColors.mainColor,
-                      child: Icon(
-                          Get.isDarkMode
-                              ? Icons.nightlight_outlined
-                              : Icons.wb_sunny_outlined,
-                          color: Colors.black87),
+                        child: Icon(
+                            Get.isDarkMode
+                                ? Icons.nightlight_outlined
+                                : Icons.wb_sunny_outlined,
+                            color: Colors.black87),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: Dimensions.height20),
-            // Body
-            FutureBuilder(
-              future: Future.wait(
-                  [controller.recommendedItems, controller.popularItems]),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<List<CarteItemModel>>> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  default:
-                    return Column(
-                      children: [
-                        RecommendedItemsView(
-                          recommendedItems: snapshot.data![0],
+              SizedBox(height: Dimensions.height20),
+              // Body
+              FutureBuilder(
+                future: Future.wait(
+                    [controller.recommendedItems, controller.popularItems]),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<List<CarteItemModel>>> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return SizedBox(
+                        height: Dimensions.screenHeight,
+                        width: Dimensions.screenWidth,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
                         ),
-                        SizedBox(height: Dimensions.height20),
-                        _buildPopularText(),
-                        PopularItemsView(
-                          popularItems: snapshot.data![1],
-                        ),
-                      ],
-                    );
-                }
-              },
-            ),
-          ],
+                      );
+                    default:
+                      return Column(
+                        children: [
+                          RecommendedItemsView(
+                            recommendedItems: snapshot.data![0],
+                          ),
+                          SizedBox(height: Dimensions.height20),
+                          _buildPopularText(),
+                          PopularItemsView(
+                            popularItems: snapshot.data![1],
+                          ),
+                        ],
+                      );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -118,12 +124,12 @@ class HomeScreen extends GetView<HomeController> {
           Container(
             margin: const EdgeInsets.only(bottom: 2),
             child: InkWell(
-              splashColor: Get.isDarkMode
-                  ? AppColors.mainDarkColor
-                  : AppColors.mainColor,
+              focusColor: Colors.transparent,
+              splashColor: Colors.transparent,
               borderRadius: BorderRadius.circular(Dimensions.radius20),
               onTap: () {
-                Get.to(() => AllCarteItemsPage());
+                Get.toNamed(
+                    '${RoutePath.homeScreenPath}${RoutePath.allItemsPagePath}');
               },
               child: Padding(
                 padding: EdgeInsets.only(
