@@ -2,6 +2,8 @@ import 'package:foodfrenz/app/modules/authentication/login/login_screen.dart';
 import 'package:foodfrenz/app/modules/authentication/signup/signup_screen.dart';
 import 'package:foodfrenz/app/modules/home/home_binding.dart';
 import 'package:foodfrenz/app/modules/home/home_screen.dart';
+import 'package:foodfrenz/app/modules/home/pages/all_carte_item_page.dart';
+import 'package:foodfrenz/app/modules/home/pages/carte_item_details_page.dart';
 import 'package:foodfrenz/app/modules/profile/profile_screen.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_screen.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
@@ -12,6 +14,16 @@ final getPages = [
     name: RoutePath.homeScreenPath,
     page: () => const HomeScreen(),
     binding: HomeBinding(),
+    children: [
+      GetPage(
+        name: RoutePath.allItemsPagePath,
+        page: () => AllCarteItemsPage(),
+      ),
+      GetPage(
+        name: RoutePath.carteItemDetailsPagePath,
+        page: () => CarteItemDetailsPage(),
+      ),
+    ],
   ),
   GetPage(
       name: RoutePath.shoppingCartScreenPath,

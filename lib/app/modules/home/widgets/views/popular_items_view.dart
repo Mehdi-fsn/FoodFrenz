@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
-import 'package:foodfrenz/app/modules/home/widgets/carte_item_card.dart';
+import 'package:foodfrenz/app/modules/home/widgets/components/simple_carte_item_card.dart';
 
 class PopularItemsView extends StatelessWidget {
   const PopularItemsView({Key? key, required this.popularItems})
@@ -18,7 +18,7 @@ class PopularItemsView extends StatelessWidget {
       shrinkWrap: true,
       itemCount: Constants.popularItemsNumber,
       itemBuilder: (context, index) {
-        return CarteItemCard(item: popularItems[index]);
+        return SimpleCarteItemCard(item: popularItems[index]);
       },
     );
   }

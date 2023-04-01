@@ -13,7 +13,11 @@ class Dimensions {
   static double height30 = screenHeight / 28.9;
   static double height45 = screenHeight / 19.26;
   static double height50 = screenHeight / 17.34;
+  static double height60 = screenHeight / 14.45;
+  static double height70 = screenHeight / 12.28;
+  static double height120 = screenHeight / 7.22;
   static double height130 = screenHeight / 6.66;
+  static double height350 = screenHeight / 2.48;
 
   // Width based on Pixel 6 Pro (411 pixels)
   static double width3 = screenWidth / 137;
@@ -35,8 +39,8 @@ class Dimensions {
   static double textSize30 = 30.0.sp;
 
   // Icon Size
-  static double iconSizeExtraSmall = 14.0.sp;
-  static double iconSizeSmall = 16.0.sp;
+  static double iconSizeSmall = 14.0.sp;
+  static double iconSizeMedium = 16.0.sp;
 
   // Radius
   static double radius5 = screenHeight / 173.4;
@@ -45,5 +49,5 @@ class Dimensions {
 
   // Home Screen
   static double homeRecommendedItemsView = screenHeight / 2.89;
-  static double homeRecommendedItemsViewWhiteCard = screenHeight / 6.80;
+  static double homeRecommendedItemsViewCard = screenHeight / 6.80;
 }
