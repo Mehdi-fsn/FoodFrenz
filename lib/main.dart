@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       getPages: getPages,
       initialBinding: BindingsBuilder(
         () {
-          Get.put(CloudFirestoreProvider());
+          Get.lazyPut(() => CloudFirestoreProvider());
         },
       ),
     );

@@ -183,7 +183,7 @@ class CarteItemDetailsPage extends StatelessWidget {
 }
 
 class ItemCountController extends GetxController {
-  var count = 0.obs;
+  var count = 1.obs;
 
   void increment() {
     if (count.value < 10) {
@@ -192,7 +192,7 @@ class ItemCountController extends GetxController {
   }
 
   void decrement() {
-    if (count.value > 0) {
+    if (count.value > 1) {
       count--;
     }
   }
