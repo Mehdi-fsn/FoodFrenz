@@ -21,7 +21,8 @@ class CarteItemModel {
     required this.origin,
   });
 
-  factory CarteItemModel.fromJson(Map<String, dynamic> map, {required String id}) {
+  factory CarteItemModel.fromJson(Map<String, dynamic> map,
+      {required String id}) {
     return CarteItemModel(
       id: id,
       name: map['name'],

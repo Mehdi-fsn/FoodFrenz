@@ -18,6 +18,11 @@ class Constants {
   static const String min = 'min';
   static const String dollar = '\$';
 
+  static const String home = 'Home';
+  static const String order = 'Order';
+  static const String cart = 'Cart';
+  static const String profile = 'Profile';
+
   //Numbers
   static const int recommendedItemsNumber = 5;
   static const int popularItemsNumber = 10;

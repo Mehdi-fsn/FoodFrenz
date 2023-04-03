@@ -4,6 +4,7 @@ import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/data/services/controllers/navigation_controller.dart';
 import 'package:foodfrenz/app/modules/home/widgets/components/detailed_carte_item_card.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
@@ -51,7 +52,12 @@ class CarteItemDetailsPage extends StatelessWidget {
                 AppIcon(
                   icon: Icons.shopping_cart_outlined,
                   onTap: () {
-                    Get.offNamedUntil(RoutePath.shoppingCartScreenPath, (route) => route.settings.name == RoutePath.homeScreenPath);
+                    final navigator = Get.key.currentState;
+                    while (navigator!.canPop()) {
+                      navigator.pop();
+                    }
+                    Get.find<NavigationController>().changePage(2);
+                    Get.offAllNamed(RoutePath.shoppingCartScreenPath, id: 1);
                   },
                 ),
               ],

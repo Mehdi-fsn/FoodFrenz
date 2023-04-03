@@ -105,9 +105,7 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
       transform: matrix,
       child: GestureDetector(
         onTap: () {
-          Get.toNamed(
-              '${RoutePath.homeScreenPath}${RoutePath.carteItemDetailsPagePath}',
-              arguments: item);
+          Get.toNamed(RoutePath.carteItemDetailsPagePath, arguments: item);
         },
         child: Container(
           margin: EdgeInsets.only(

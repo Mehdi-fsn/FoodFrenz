@@ -6,7 +6,8 @@ import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:get/get.dart';
 
 class ShoppingCartItemCard extends StatelessWidget {
-  const ShoppingCartItemCard({Key? key, required this.products}) : super(key: key);
+  const ShoppingCartItemCard({Key? key, required this.products})
+      : super(key: key);
 
   final ShoppingCartItemModel products;
 
@@ -67,7 +68,7 @@ class ShoppingCartItemCard extends StatelessWidget {
                     ),
                     SizedBox(width: Dimensions.width10),
                     Obx(
-                          () => Text(
+                      () => Text(
                         products.quantity.toString(),
                         style: TextStyle(
                             fontSize: Dimensions.textSizeLarge,
