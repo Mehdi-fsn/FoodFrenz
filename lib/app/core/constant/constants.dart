@@ -9,6 +9,7 @@ class Constants {
   static const String desserts = 'Desserts';
   static const String introduce = 'Introduce';
   static const String addToCart = 'Add to cart';
+  static const String shoppingCart = 'Shopping Cart';
   static const String showMore = 'Show more';
   static const String showLess = 'Show less';
 
