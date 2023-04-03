@@ -128,8 +128,7 @@ class HomeScreen extends GetView<HomeController> {
               splashColor: Colors.transparent,
               borderRadius: BorderRadius.circular(Dimensions.radius20),
               onTap: () {
-                Get.toNamed(
-                    '${RoutePath.homeScreenPath}${RoutePath.allItemsPagePath}');
+                Get.toNamed(RoutePath.allItemsPagePath);
               },
               child: Padding(
                 padding: EdgeInsets.only(

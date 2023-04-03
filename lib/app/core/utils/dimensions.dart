@@ -26,6 +26,7 @@ class Dimensions {
   static double width15 = screenWidth / 27.4;
   static double width20 = screenWidth / 20.55;
   static double width45 = screenWidth / 9.13;
+  static double width60 = screenWidth / 6.85;
 
   // Text Size
   static double textSizeExtraSmall = 8.0.sp;
@@ -44,6 +45,7 @@ class Dimensions {
 
   // Radius
   static double radius5 = screenHeight / 173.4;
+  static double radius10 = screenHeight / 86.7;
   static double radius20 = screenHeight / 43.35;
   static double radius30 = screenHeight / 28.9;
 

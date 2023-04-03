@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/theme/color_schemes.g.dart';
 import 'package:foodfrenz/app/core/utils/firebase_options.dart';
-import 'package:foodfrenz/app/data/providers/cloud_firestore_provider.dart';
+import 'package:foodfrenz/app/data/services/main_bindings.dart';
 import 'package:foodfrenz/app/routes/pages.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
@@ -35,19 +35,10 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
       themeMode: ThemeMode.light,
-      unknownRoute: GetPage(
-        name: RoutePath.notFoundScreenPath,
-        page: () => const Center(
-          child: Text('404 Not Found'),
-        ),
-      ),
-      initialRoute: RoutePath.homeScreenPath,
+      defaultTransition: Transition.fade,
+      initialRoute: RoutePath.basePath,
       getPages: getPages,
-      initialBinding: BindingsBuilder(
-        () {
-          Get.put(CloudFirestoreProvider());
-        },
-      ),
+      initialBinding: MainBindings(),
     );
   }
 }

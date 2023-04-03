@@ -4,7 +4,9 @@ import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/data/services/controllers/navigation_controller.dart';
 import 'package:foodfrenz/app/modules/home/widgets/components/detailed_carte_item_card.dart';
+import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:foodfrenz/app/widgets/expandable_text_widget.dart';
 import 'package:get/get.dart';
@@ -50,7 +52,12 @@ class CarteItemDetailsPage extends StatelessWidget {
                 AppIcon(
                   icon: Icons.shopping_cart_outlined,
                   onTap: () {
-                    // TODO: Navigate to cart page;
+                    final navigator = Get.key.currentState;
+                    while (navigator!.canPop()) {
+                      navigator.pop();
+                    }
+                    Get.find<NavigationController>().changePage(2);
+                    Get.offAllNamed(RoutePath.shoppingCartScreenPath, id: 1);
                   },
                 ),
               ],
@@ -183,7 +190,7 @@ class CarteItemDetailsPage extends StatelessWidget {
 }
 
 class ItemCountController extends GetxController {
-  var count = 0.obs;
+  var count = 1.obs;
 
   void increment() {
     if (count.value < 10) {
@@ -192,7 +199,7 @@ class ItemCountController extends GetxController {
   }
 
   void decrement() {
-    if (count.value > 0) {
+    if (count.value > 1) {
       count--;
     }
   }

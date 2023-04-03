@@ -9,7 +9,7 @@ class CloudFirestoreProvider {
         .map((querySnapshot) {
       return querySnapshot.docs.map(
         (doc) {
-          return CarteItemModel.fromJson(doc.data());
+          return CarteItemModel.fromJson(doc.data(), id: doc.id);
         },
       ).toList();
     });
@@ -22,7 +22,7 @@ class CloudFirestoreProvider {
         .map((querySnapshot) {
       return querySnapshot.docs.map(
         (doc) {
-          return CarteItemModel.fromJson(doc.data());
+          return CarteItemModel.fromJson(doc.data(), id: doc.id);
         },
       ).toList();
     });
@@ -35,41 +35,9 @@ class CloudFirestoreProvider {
         .map((querySnapshot) {
       return querySnapshot.docs.map(
         (doc) {
-          return CarteItemModel.fromJson(doc.data());
+          return CarteItemModel.fromJson(doc.data(), id: doc.id);
         },
       ).toList();
     });
   }
-
-/*Future<Map<String, dynamic>> get fetchAllCarteItems async {
-    final firestore = FirebaseFirestore.instance;
-    Map<String, dynamic> res = {};
-
-    QuerySnapshot querySnapshot =
-        await firestore.collection('appetizers').get();
-    res['appetizers'] = [];
-    for (var doc in querySnapshot.docs) {
-      var docData = doc.data() as Map<String, dynamic>;
-      docData['category'] = CarteItemCategory.appetizer;
-      res['appetizers'].add(docData);
-    }
-
-    querySnapshot = await firestore.collection('main_courses').get();
-    res['main_courses'] = [];
-    for (var doc in querySnapshot.docs) {
-      var docData = doc.data() as Map<String, dynamic>;
-      docData['category'] = CarteItemCategory.mainCourse;
-      res['main_courses'].add(docData);
-    }
-
-    querySnapshot = await firestore.collection('desserts').get();
-    res['desserts'] = [];
-    for (var doc in querySnapshot.docs) {
-      var docData = doc.data() as Map<String, dynamic>;
-      docData['category'] = CarteItemCategory.dessert;
-      res['desserts'].add(docData);
-    }
-
-    return res;
-  }*/
 }

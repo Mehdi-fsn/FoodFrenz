@@ -1,4 +1,5 @@
 class CarteItemModel {
+  final String id;
   final String name;
   final String image;
   final String description;
@@ -9,6 +10,7 @@ class CarteItemModel {
   final String origin;
 
   CarteItemModel({
+    required this.id,
     required this.name,
     required this.image,
     required this.description,
@@ -19,8 +21,10 @@ class CarteItemModel {
     required this.origin,
   });
 
-  factory CarteItemModel.fromJson(Map<String, dynamic> map) {
+  factory CarteItemModel.fromJson(Map<String, dynamic> map,
+      {required String id}) {
     return CarteItemModel(
+      id: id,
       name: map['name'],
       image: map['image'],
       description: map['description'],

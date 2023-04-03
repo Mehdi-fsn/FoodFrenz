@@ -22,9 +22,7 @@ class SimpleCarteItemCard extends StatelessWidget {
       width: double.infinity,
       child: GestureDetector(
         onTap: () {
-          Get.toNamed(
-              '${RoutePath.homeScreenPath}${RoutePath.carteItemDetailsPagePath}',
-              arguments: item);
+          Get.toNamed(RoutePath.carteItemDetailsPagePath, arguments: item);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

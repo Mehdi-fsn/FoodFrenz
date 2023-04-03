@@ -9,6 +9,7 @@ class Constants {
   static const String desserts = 'Desserts';
   static const String introduce = 'Introduce';
   static const String addToCart = 'Add to cart';
+  static const String shoppingCart = 'Shopping Cart';
   static const String showMore = 'Show more';
   static const String showLess = 'Show less';
 
@@ -16,6 +17,11 @@ class Constants {
   static const String km = 'km';
   static const String min = 'min';
   static const String dollar = '\$';
+
+  static const String home = 'Home';
+  static const String order = 'Order';
+  static const String cart = 'Cart';
+  static const String profile = 'Profile';
 
   //Numbers
   static const int recommendedItemsNumber = 5;
