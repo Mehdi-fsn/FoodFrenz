@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodfrenz/app/modules/authentication/login/login_screen.dart';
-import 'package:foodfrenz/app/modules/authentication/signup/signup_screen.dart';
 import 'package:foodfrenz/app/modules/home/home_binding.dart';
 import 'package:foodfrenz/app/modules/home/home_screen.dart';
 import 'package:foodfrenz/app/modules/order/order_screen.dart';
@@ -43,16 +41,6 @@ class NavigationController extends GetxController {
         return GetPageRoute(
           settings: settings,
           page: () => const ProfileScreen(),
-        );
-      case RoutePath.loginScreenPath:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const LoginScreen(),
-        );
-      case RoutePath.signupScreenPath:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const SignupScreen(),
         );
       default:
         return GetPageRoute(
