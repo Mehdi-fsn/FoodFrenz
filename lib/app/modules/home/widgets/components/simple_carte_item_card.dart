@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
-import 'package:foodfrenz/app/routes/route_path.dart';
+import 'package:foodfrenz/app/modules/home/pages/carte_item_details_page.dart';
 import 'package:get/get.dart';
 
 class SimpleCarteItemCard extends StatelessWidget {
@@ -22,7 +22,14 @@ class SimpleCarteItemCard extends StatelessWidget {
       width: double.infinity,
       child: GestureDetector(
         onTap: () {
-          Get.toNamed(RoutePath.carteItemDetailsPagePath, arguments: item);
+          // Get.toNamed(RoutePath.carteItemDetailsPagePath, arguments: item);
+          Get.dialog(
+            CarteItemDetailsPage(
+              item: item,
+            ),
+            useSafeArea: false,
+            barrierDismissible: false,
+          );
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

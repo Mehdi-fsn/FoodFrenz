@@ -1,4 +1,5 @@
 class Constants {
+  // TODO: Sort constants by alphabetical order
   // Strings
   static const String foodFrenz = 'FoodFrenz';
   static const String popular = 'Popular';

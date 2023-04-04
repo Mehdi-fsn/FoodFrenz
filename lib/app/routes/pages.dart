@@ -1,32 +1,23 @@
+import 'package:foodfrenz/app/data/services/bindings/main_binding.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_screen.dart';
-import 'package:foodfrenz/app/modules/home/pages/all_carte_item_page.dart';
-import 'package:foodfrenz/app/modules/home/pages/carte_item_details_page.dart';
 import 'package:foodfrenz/app/modules/main_screen.dart';
+import 'package:foodfrenz/app/routes/middlewares/authentication_middleware.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
 final getPages = [
-  // Base Page
+  // Main
   GetPage(
     name: RoutePath.basePath,
     page: () => const MainScreen(),
+    binding: MainBinding(),
+    middlewares: [
+      AuthenticationMiddleware(),
+    ],
   ),
-
-  // Home Another Pages
-  GetPage(
-    name: RoutePath.allItemsPagePath,
-    page: () => AllCarteItemsPage(),
-    transition: Transition.rightToLeftWithFade,
-  ),
-  GetPage(
-    name: RoutePath.carteItemDetailsPagePath,
-    page: () => CarteItemDetailsPage(),
-    transition: Transition.rightToLeftWithFade,
-  ),
-
   // Authentication Screen
   GetPage(
-    name: RoutePath.authenticationScreen,
+    name: RoutePath.authenticationScreenPath,
     page: () => const AuthenticationScreen(),
   ),
 ];
