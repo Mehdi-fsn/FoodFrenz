@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:foodfrenz/app/modules/authentication/authentication_screen.dart';
+import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
+import 'package:foodfrenz/app/routes/route_path.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const AuthenticationScreen();
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Get.find<AuthenticationController>().signOut();
+            Get.offAllNamed(RoutePath.authenticationScreenPath);
+          },
+          child: const Text('Sign Out'),
+        ),
+      ),
+    );
   }
 }

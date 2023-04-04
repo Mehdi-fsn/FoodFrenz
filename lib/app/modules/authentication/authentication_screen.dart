@@ -2,46 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
-import 'package:foodfrenz/app/data/services/controllers/navigation_controller.dart';
+import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
-const users = {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
-
-class AuthenticationScreen extends StatelessWidget {
+class AuthenticationScreen extends GetView<AuthenticationController> {
   const AuthenticationScreen({Key? key}) : super(key: key);
 
-  Duration get loginTime => const Duration(milliseconds: 2250);
-
-  Future<String?> _authUser(LoginData data) {
-    debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
-        return 'User not exists';
-      }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
-      }
-      return null;
-    });
-  }
-
-  Future<String?> _signupUser(SignupData data) {
-    debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      return null;
-    });
-  }
-
+  // TODO: Implement recovery password
   Future<String?> _recoverPassword(String name) {
-    debugPrint('Name: $name');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'User not exists';
-      }
+    return Future.delayed(const Duration(milliseconds: 2250)).then((_) {
       return null;
     });
   }
@@ -49,14 +19,22 @@ class AuthenticationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // TODO: Implement Message
         body: FlutterLogin(
+      logo: 'assets/images/logo_foodfrenz.png',
+      onLogin: controller.signIn,
+      onSignup: controller.signUp,
+      onSubmitAnimationCompleted: () {
+        Get.toNamed(RoutePath.basePath);
+      },
+      onRecoverPassword: _recoverPassword,
       theme: LoginTheme(
         pageColorDark: AppColors.mainColor,
         accentColor: AppColors.mainColor,
         cardTheme: CardTheme(
           elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Dimensions.radius10),
+            borderRadius: BorderRadius.circular(Dimensions.radius20),
           ),
         ),
         inputTheme: InputDecorationTheme(
@@ -91,14 +69,6 @@ class AuthenticationScreen extends StatelessWidget {
           ),
         ),
       ),
-      logo: 'assets/images/logo_foodfrenz.png',
-      onLogin: _authUser,
-      onSignup: _signupUser,
-      onSubmitAnimationCompleted: () {
-        Get.find<NavigationController>().changePage(0);
-        Get.toNamed(RoutePath.homeScreenPath, id: 1);
-      },
-      onRecoverPassword: _recoverPassword,
     ));
   }
 }
