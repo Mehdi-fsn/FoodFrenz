@@ -19,10 +19,20 @@ class AuthenticationRepository {
     return result;
   }
 
+  Future<String?> signInWithGoogle() async {
+    final result = await authenticationProvider.signInWithGoogle();
+    return result;
+  }
+
   Future<String?> signUp(
       {required String email, required String password}) async {
     final result =
         await authenticationProvider.signUp(email: email, password: password);
+    return result;
+  }
+
+  Future<String?> recoverPassword({required String email}) async {
+    final result = await authenticationProvider.recoverPassword(email: email);
     return result;
   }
 }

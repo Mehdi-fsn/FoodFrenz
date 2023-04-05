@@ -24,6 +24,11 @@ class AuthenticationController extends GetxController {
     return result;
   }
 
+  Future<String?> signInWithGoogle() async {
+    final result = await repository.signInWithGoogle();
+    return result;
+  }
+
   Future<String?> signUp(SignupData data) async {
     final result =
         await repository.signUp(email: data.name!, password: data.password!);
@@ -32,5 +37,10 @@ class AuthenticationController extends GetxController {
 
   Future<void> signOut() async {
     await repository.signOut();
+  }
+
+  Future<String?> recoverPassword(String email) async {
+    final result = await repository.recoverPassword(email: email);
+    return result;
   }
 }

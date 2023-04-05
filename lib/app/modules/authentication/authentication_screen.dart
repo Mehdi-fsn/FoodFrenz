@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
@@ -9,17 +10,9 @@ import 'package:get/get.dart';
 class AuthenticationScreen extends GetView<AuthenticationController> {
   const AuthenticationScreen({Key? key}) : super(key: key);
 
-  // TODO: Implement recovery password
-  Future<String?> _recoverPassword(String name) {
-    return Future.delayed(const Duration(milliseconds: 2250)).then((_) {
-      return null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // TODO: Implement Message
         body: FlutterLogin(
       logo: 'assets/images/logo_foodfrenz.png',
       onLogin: controller.signIn,
@@ -27,7 +20,14 @@ class AuthenticationScreen extends GetView<AuthenticationController> {
       onSubmitAnimationCompleted: () {
         Get.toNamed(RoutePath.basePath);
       },
-      onRecoverPassword: _recoverPassword,
+      onRecoverPassword: controller.recoverPassword,
+      loginProviders: [
+        LoginProvider(
+          icon: FontAwesomeIcons.google,
+          label: 'Google',
+          callback: controller.signInWithGoogle,
+        ),
+      ],
       theme: LoginTheme(
         pageColorDark: AppColors.mainColor,
         accentColor: AppColors.mainColor,

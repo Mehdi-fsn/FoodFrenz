@@ -22,11 +22,30 @@ class AuthenticationProvider {
     }
   }
 
+  Future<String?> signInWithGoogle() async {
+    try {
+      final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      await _firebaseAuth.signInWithPopup(googleProvider);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
   Future<String?> signUp(
       {required String email, required String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<String?> recoverPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
