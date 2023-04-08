@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foodfrenz/app/data/providers/cloud_firestore_provider.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationProvider {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final CloudFirestoreProvider _cloudFirestoreProvider = Get.find();
 
   AuthenticationProvider();
 
@@ -37,6 +40,7 @@ class AuthenticationProvider {
 
     try {
       await _firebaseAuth.signInWithCredential(credential);
+      await _cloudFirestoreProvider.createEmptyCart(_firebaseAuth.currentUser!.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -48,6 +52,7 @@ class AuthenticationProvider {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      await _cloudFirestoreProvider.createEmptyCart(_firebaseAuth.currentUser!.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

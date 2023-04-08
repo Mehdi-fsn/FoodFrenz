@@ -40,4 +40,19 @@ class CloudFirestoreProvider {
       ).toList();
     });
   }
+
+  Future<void> createEmptyCart(String userId) async {
+    bool exists = await checkIfCartExists(userId);
+    if (!exists) {
+      CollectionReference carts =
+          FirebaseFirestore.instance.collection('carts');
+      await carts.doc(userId).set({'items': []});
+    }
+  }
+
+  Future<bool> checkIfCartExists(String userId) async {
+    CollectionReference carts = FirebaseFirestore.instance.collection('carts');
+    DocumentSnapshot cart = await carts.doc(userId).get();
+    return cart.exists;
+  }
 }
