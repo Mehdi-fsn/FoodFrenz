@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
-import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -13,7 +12,6 @@ class ProfileScreen extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Get.find<AuthenticationController>().signOut();
-            Get.offAllNamed(RoutePath.authenticationScreenPath);
           },
           child: const Text('Sign Out'),
         ),

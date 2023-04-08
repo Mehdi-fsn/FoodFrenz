@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_repository.dart';
+import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
@@ -15,6 +16,10 @@ class AuthenticationController extends GetxController {
   @override
   void onReady() {
     _user.bindStream(repository.auth);
+
+    ever(_user, (_) {
+      if (user == null) Get.offAllNamed(RoutePath.authenticationScreenPath);
+    });
     super.onReady();
   }
 
