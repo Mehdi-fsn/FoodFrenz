@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/theme/color_schemes.g.dart';
 import 'package:foodfrenz/app/core/utils/firebase_options.dart';
-import 'package:foodfrenz/app/data/services/main_bindings.dart';
+import 'package:foodfrenz/app/data/services/bindings/init_bindings.dart';
 import 'package:foodfrenz/app/routes/pages.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
@@ -13,6 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await initBindings();
   runApp(const MyApp());
 }
 
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
       defaultTransition: Transition.fade,
       initialRoute: RoutePath.basePath,
       getPages: getPages,
-      initialBinding: MainBindings(),
     );
   }
 }

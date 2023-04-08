@@ -10,59 +10,56 @@ class ShoppingCartScreen extends GetView<ShoppingCartController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    Constants.shoppingCart,
-                    style: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.mainDarkColor
-                            : AppColors.mainColor,
-                        fontSize: Dimensions.textSize30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    width: Dimensions.height45,
-                    height: Dimensions.height45,
-                    decoration: BoxDecoration(
-                      color: Get.isDarkMode
+    return SafeArea(
+      child: Column(
+        children: [
+          // Header
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  Constants.shoppingCart,
+                  style: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
                           ? AppColors.mainDarkColor
                           : AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(Dimensions.radius10),
-                    ),
-                    child: Icon(Icons.shopping_cart_outlined,
-                        color: Get.isDarkMode ? Colors.black87 : Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            // List of items
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
-                child: Obx(
-                  () => controller.shoppingCart.isEmpty
-                      ? const Text("No products")
-                      : ListView.builder(
-                          itemCount: controller.shoppingCart.length,
-                          itemBuilder: (context, index) {
-                            return Text(
-                                controller.shoppingCart[index].item.name);
-                          }),
+                      fontSize: Dimensions.textSize30,
+                      fontWeight: FontWeight.bold),
                 ),
+                Container(
+                  width: Dimensions.height45,
+                  height: Dimensions.height45,
+                  decoration: BoxDecoration(
+                    color: Get.isDarkMode
+                        ? AppColors.mainDarkColor
+                        : AppColors.mainColor,
+                    borderRadius: BorderRadius.circular(Dimensions.radius10),
+                  ),
+                  child: Icon(Icons.shopping_cart_outlined,
+                      color: Get.isDarkMode ? Colors.black87 : Colors.white),
+                ),
+              ],
+            ),
+          ),
+          // List of items
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
+              child: Obx(
+                () => controller.shoppingCart.isEmpty
+                    ? const Text("No products")
+                    : ListView.builder(
+                        itemCount: controller.shoppingCart.length,
+                        itemBuilder: (context, index) {
+                          return Text(controller.shoppingCart[index].item.name);
+                        }),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

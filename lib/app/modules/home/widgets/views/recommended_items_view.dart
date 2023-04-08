@@ -5,8 +5,8 @@ import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/modules/home/pages/carte_item_details_page.dart';
 import 'package:foodfrenz/app/modules/home/widgets/components/detailed_carte_item_card.dart';
-import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
 
 class RecommendedItemsView extends StatefulWidget {
@@ -105,7 +105,13 @@ class _RecommendedItemsViewState extends State<RecommendedItemsView> {
       transform: matrix,
       child: GestureDetector(
         onTap: () {
-          Get.toNamed(RoutePath.carteItemDetailsPagePath, arguments: item);
+          Get.dialog(
+            CarteItemDetailsPage(
+              item: item,
+            ),
+            useSafeArea: false,
+            barrierDismissible: false,
+          );
         },
         child: Container(
           margin: EdgeInsets.only(

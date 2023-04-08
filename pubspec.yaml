@@ -40,6 +40,10 @@ dependencies:
   path_provider: ^2.0.13
   dots_indicator: ^2.1.0
   get: ^4.6.5
+  flutter_login: ^4.1.1
+  firebase_auth: ^4.4.0
+  font_awesome_flutter: ^10.4.0
+  google_sign_in: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +66,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
 
   fonts:
     - family: Roboto

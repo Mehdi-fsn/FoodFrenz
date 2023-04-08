@@ -12,6 +12,5 @@ class RoutePath {
   static const String orderScreenPath = '/order';
   static const String shoppingCartScreenPath = '/shopping-cart';
   static const String profileScreenPath = '/profile';
-  static const String loginScreenPath = '/login';
-  static const String signupScreenPath = '/signup';
+  static const String authenticationScreenPath = '/authentication';
 }
