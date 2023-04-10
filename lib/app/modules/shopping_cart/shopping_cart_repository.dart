@@ -12,4 +12,14 @@ class ShoppingCartRepository {
   Future<void> addToCart(String userId, ShoppingCartItemModel item) async {
     await cloudFirestoreProvider.addToCart(userId, item);
   }
+
+  Future<void> removedItemInCart(
+      String userId, ShoppingCartItemModel item) async {
+    await cloudFirestoreProvider.removedItemInCart(userId, item);
+  }
+
+  Future<void> updateItemQuantity(
+      String userId, ShoppingCartItemModel item) async {
+    await cloudFirestoreProvider.updateItemQuantity(userId, item);
+  }
 }

@@ -57,14 +57,44 @@ class CarteItemDetailsPage extends StatelessWidget {
                         Get.back();
                       },
                     ),
-                    AppIcon(
-                      icon: Icons.shopping_cart_outlined,
-                      onTap: () {
-                        Get.delete<ItemQuantityController>();
-                        Get.back();
-                        Get.find<NavigationController>().changePage(2);
-                        Get.toNamed(RoutePath.shoppingCartScreenPath, id: 1);
-                      },
+                    Stack(
+                      children: [
+                        AppIcon(
+                          icon: Icons.shopping_cart_outlined,
+                          onTap: () {
+                            Get.until((route) => !Get.isDialogOpen!);
+                            Get.toNamed(RoutePath.shoppingCartScreenPath,
+                                id: 1);
+                            Get.find<NavigationController>().changePage(2);
+                            Get.delete<ItemQuantityController>();
+                          },
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            height: Dimensions.height15,
+                            width: Dimensions.height15,
+                            decoration: BoxDecoration(
+                              color: Get.isDarkMode
+                                  ? AppColors.mainDarkColor
+                                  : AppColors.mainColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Obx(
+                                () => Text(
+                                  shoppingCartController.totalItems,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: Dimensions.textSizeExtraSmall,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),

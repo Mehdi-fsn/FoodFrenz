@@ -5,7 +5,7 @@ class ShoppingCartItemModel {
   final String name;
   final String image;
   final num price;
-  final int quantity;
+  int quantity;
 
   ShoppingCartItemModel({
     required this.id,
@@ -44,5 +44,21 @@ class ShoppingCartItemModel {
       'price': price,
       'quantity': quantity,
     };
+  }
+
+  ShoppingCartItemModel copyWith({
+    String? id,
+    String? name,
+    String? image,
+    num? price,
+    int? quantity,
+  }) {
+    return ShoppingCartItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }

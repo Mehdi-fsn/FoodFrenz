@@ -38,13 +38,17 @@ class HomeScreen extends GetView<HomeController> {
                     width: Dimensions.height45,
                     height: Dimensions.height45,
                     child: FloatingActionButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radius10),
+                      ),
+                      backgroundColor: Get.isDarkMode
+                          ? AppColors.mainDarkColor
+                          : AppColors.mainColor,
                       onPressed: () {
                         Get.changeThemeMode(
                             Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
                       },
-                      backgroundColor: Get.isDarkMode
-                          ? AppColors.mainDarkColor
-                          : AppColors.mainColor,
                       child: Icon(
                           Get.isDarkMode
                               ? Icons.nightlight_outlined

@@ -22,7 +22,7 @@ class MainScreen extends GetView<NavigationController> {
             selectedItemColor:
                 Get.isDarkMode ? AppColors.mainDarkColor : AppColors.mainColor,
             unselectedItemColor:
-                Get.isDarkMode ? Colors.white : AppColors.paraColor,
+                Get.theme.colorScheme.onBackground.withOpacity(0.5),
             showSelectedLabels: false,
             showUnselectedLabels: false,
             items: const [
