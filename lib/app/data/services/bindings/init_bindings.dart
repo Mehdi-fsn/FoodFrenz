@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 
 Future<void> initBindings() async {
   // Provider
-  Get.put(AuthenticationProvider(), permanent: true);
   Get.put(CloudFirestoreProvider(), permanent: true);
+  Get.put(AuthenticationProvider(), permanent: true);
 
   // Authentication
   AuthenticationBinding().dependencies();

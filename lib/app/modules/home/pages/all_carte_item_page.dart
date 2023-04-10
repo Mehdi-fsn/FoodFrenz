@@ -34,13 +34,17 @@ class AllCarteItemsPage extends StatelessWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon: Icons.arrow_back, onTap: () => Get.back()),
+                AppIcon(
+                    icon: Icons.arrow_back,
+                    onTap: () {
+                      Get.delete<IndexController>();
+                      Get.back();
+                    }),
                 Text(Constants.allMenu,
                     style: TextStyle(
                         color: Get.isDarkMode ? Colors.black : Colors.white)),
               ],
             ),
-            automaticallyImplyLeading: false,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(Dimensions.height70),
               child: Container(
@@ -84,6 +88,7 @@ class AllCarteItemsPage extends StatelessWidget {
                 ),
               ),
             ),
+            automaticallyImplyLeading: false,
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(

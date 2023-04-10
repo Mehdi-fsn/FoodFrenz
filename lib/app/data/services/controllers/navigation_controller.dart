@@ -3,7 +3,6 @@ import 'package:foodfrenz/app/modules/home/home_binding.dart';
 import 'package:foodfrenz/app/modules/home/home_screen.dart';
 import 'package:foodfrenz/app/modules/order/order_screen.dart';
 import 'package:foodfrenz/app/modules/profile/profile_screen.dart';
-import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_binding.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_screen.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:get/get.dart';
@@ -35,7 +34,6 @@ class NavigationController extends GetxController {
         return GetPageRoute(
           settings: settings,
           page: () => const ShoppingCartScreen(),
-          binding: ShoppingCartBinding(),
         );
       case RoutePath.profileScreenPath:
         return GetPageRoute(

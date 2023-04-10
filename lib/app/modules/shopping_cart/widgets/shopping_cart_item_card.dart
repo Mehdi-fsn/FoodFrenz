@@ -3,95 +3,136 @@ import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_controller.dart';
 import 'package:get/get.dart';
 
-class ShoppingCartItemCard extends StatelessWidget {
-  const ShoppingCartItemCard({Key? key, required this.products})
-      : super(key: key);
+class ShoppingCartItemCard extends GetView<ShoppingCartController> {
+  const ShoppingCartItemCard({Key? key, required this.item}) : super(key: key);
 
-  final ShoppingCartItemModel products;
+  final ShoppingCartItemModel item;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Image
-        AspectRatio(
-          aspectRatio: 1,
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: products.item.image,
-          ),
+    return Dismissible(
+      key: Key(item.id),
+      direction: DismissDirection.endToStart,
+      onDismissed: (_) {
+        controller.removedItemInCart(item);
+      },
+      background: Container(
+        padding: EdgeInsets.only(right: Dimensions.width20),
+        alignment: Alignment.centerRight,
+        color: Colors.red,
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
         ),
-        SizedBox(width: Dimensions.width10),
-        // Details
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      ),
+      child: Container(
+        margin: EdgeInsets.only(bottom: Dimensions.height10),
+        height: Dimensions.height80,
+        width: double.infinity,
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              products.item.name,
-              style: TextStyle(
-                fontSize: Dimensions.textSizeLarge,
-                color: Get.theme.colorScheme.onBackground,
+            AspectRatio(
+              aspectRatio: 1,
+              child: CachedNetworkImage(
+                imageUrl: item.image,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Dimensions.radius15),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) => const Center(
+                  child: SizedBox.shrink(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '\$${products.item.price.toString()}',
-                  style: TextStyle(
-                    fontSize: Dimensions.textSizeMedium,
-                    color: Get.theme.colorScheme.onBackground,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width20,
-                    vertical: Dimensions.height15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  ),
-                  child: Row(children: [
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: decrement
-                      },
-                      child: const Icon(
-                        Icons.remove,
-                        color: AppColors.signColor,
+            SizedBox(width: Dimensions.width10),
+            // Details
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: Dimensions.height5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      style: TextStyle(
+                        fontSize: Dimensions.textSizeLarge,
+                        fontWeight: FontWeight.w500,
+                        color: Get.isDarkMode
+                            ? Get.theme.colorScheme.onBackground
+                            : Colors.black54,
                       ),
                     ),
-                    SizedBox(width: Dimensions.width10),
-                    Obx(
-                      () => Text(
-                        products.quantity.toString(),
-                        style: TextStyle(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '\$ ${item.price.toString()}',
+                          style: TextStyle(
                             fontSize: Dimensions.textSizeLarge,
-                            color: AppColors.textColor),
-                      ),
-                    ),
-                    SizedBox(width: Dimensions.width10),
-                    GestureDetector(
-                      onTap: () {
-                        // TODO: increment
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        color: AppColors.signColor,
-                      ),
-                    ),
-                  ]),
+                            fontWeight: FontWeight.w500,
+                            color: Get.isDarkMode
+                                ? Get.theme.colorScheme.onBackground
+                                : Colors.black54,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                controller.updateItemQuantity(
+                                    item, item.quantity - 1);
+                              },
+                              child: const Icon(
+                                Icons.remove,
+                                color: AppColors.signColor,
+                              ),
+                            ),
+                            SizedBox(width: Dimensions.width5),
+                            Obx(
+                              () => Text(
+                                controller.shoppingCart
+                                    .firstWhere(
+                                        (element) => element.id == item.id)
+                                    .quantity
+                                    .toString(),
+                                style: TextStyle(
+                                    fontSize: Dimensions.textSizeLarge,
+                                    color: AppColors.textColor),
+                              ),
+                            ),
+                            SizedBox(width: Dimensions.width5),
+                            GestureDetector(
+                              onTap: () {
+                                controller.updateItemQuantity(
+                                    item, item.quantity + 1);
+                              },
+                              child: const Icon(
+                                Icons.add,
+                                color: AppColors.signColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-              ],
+              ),
             )
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 }

@@ -1,20 +1,60 @@
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
+import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_repository.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class ShoppingCartController extends GetxController {
-  final _shoppingCart = <ShoppingCartItemModel>[].obs;
+  final ShoppingCartRepository shoppingCartRepository;
 
-  List<ShoppingCartItemModel> get shoppingCart => _shoppingCart;
+  ShoppingCartController({required this.shoppingCartRepository});
 
-  void addProduct(ShoppingCartItemModel product) {
-    _shoppingCart.add(product);
+  final String userId = Get.find<AuthenticationController>().user!.uid;
+  final shoppingCart = <ShoppingCartItemModel>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    shoppingCart.bindStream(shoppingCartRepository.getCart(userId));
   }
 
-  void removeProduct(ShoppingCartItemModel product) {
-    _shoppingCart.remove(product);
+  Future<void> addToCart(ShoppingCartItemModel item) async {
+    await shoppingCartRepository.addToCart(userId, item);
   }
 
-  void setQuantity(ShoppingCartItemModel product, int quantity) {
-    product.quantity = quantity;
+  Future<void> removedItemInCart(ShoppingCartItemModel item) async {
+    await shoppingCartRepository.removedItemInCart(userId, item);
   }
+
+  void updateItemQuantity(ShoppingCartItemModel item, int newQuantity) {
+    if (newQuantity > 10) {
+      return;
+    } else if (newQuantity == 0) {
+      removedItemInCart(item);
+    } else {
+      var itemIndex = shoppingCart.indexWhere((i) => i.id == item.id);
+      shoppingCart[itemIndex] = item.copyWith(quantity: newQuantity);
+      item.quantity = newQuantity;
+      _updateItemQuantityDebounced(item);
+    }
+  }
+
+  final _debouncer = Debouncer(delay: const Duration(seconds: 3));
+
+  void _updateItemQuantityDebounced(ShoppingCartItemModel item) {
+    _debouncer.call(() async =>
+        await shoppingCartRepository.updateItemQuantity(userId, item));
+  }
+
+  String get totalPrice => shoppingCart
+      .fold(
+          0.0,
+          (previousValue, element) =>
+              previousValue + (element.price * element.quantity))
+      .toStringAsFixed(2);
+
+  String get totalItems => shoppingCart
+      .fold(0, (previousValue, element) => previousValue + element.quantity)
+      .toString();
 }
