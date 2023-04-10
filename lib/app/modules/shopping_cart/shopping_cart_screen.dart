@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
+import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_controller.dart';
 import 'package:get/get.dart';
 
@@ -46,19 +47,22 @@ class ShoppingCartScreen extends GetView<ShoppingCartController> {
           ),
           // List of items
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
-              child: Obx(
-                () => controller.shoppingCart.isEmpty
-                    ? const Text("No products")
-                    : ListView.builder(
-                        itemCount: controller.shoppingCart.length,
-                        itemBuilder: (context, index) {
-                          return Text(controller.shoppingCart[index].item.name);
-                        }),
+              child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
+            child: Obx(
+              () => ListView.builder(
+                itemCount: controller.shoppingCart.length,
+                itemBuilder: (_, int index) {
+                  final ShoppingCartItemModel item =
+                      controller.shoppingCart[index];
+                  return ListTile(
+                    title: Text(item.name),
+                    subtitle: Text(item.price.toString()),
+                  );
+                },
               ),
             ),
-          ),
+          )),
         ],
       ),
     );

@@ -7,10 +7,9 @@ import 'package:foodfrenz/app/modules/home/home_repository.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  final HomeRepository _homeRepository;
+  final HomeRepository homeRepository;
 
-  HomeController({required HomeRepository homeRepository})
-      : _homeRepository = homeRepository;
+  HomeController({required this.homeRepository});
 
   final appetizerItems = <CarteItemModel>[].obs;
   final mainCourseItems = <CarteItemModel>[].obs;
@@ -26,13 +25,13 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _appetizersSubscription = _homeRepository.getAppetizers().listen((items) {
+    _appetizersSubscription = homeRepository.getAppetizers().listen((items) {
       appetizerItems.value = items;
     });
-    _mainCoursesSubscription = _homeRepository.getMainCourses().listen((items) {
+    _mainCoursesSubscription = homeRepository.getMainCourses().listen((items) {
       mainCourseItems.value = items;
     });
-    _dessertsSubscription = _homeRepository.getDesserts().listen((items) {
+    _dessertsSubscription = homeRepository.getDesserts().listen((items) {
       dessertItems.value = items;
     });
   }

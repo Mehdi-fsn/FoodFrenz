@@ -40,7 +40,8 @@ class AuthenticationProvider {
 
     try {
       await _firebaseAuth.signInWithCredential(credential);
-      await _cloudFirestoreProvider.createEmptyCart(_firebaseAuth.currentUser!.uid);
+      await _cloudFirestoreProvider
+          .createEmptyCart(_firebaseAuth.currentUser!.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -52,7 +53,8 @@ class AuthenticationProvider {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await _cloudFirestoreProvider.createEmptyCart(_firebaseAuth.currentUser!.uid);
+      await _cloudFirestoreProvider
+          .createEmptyCart(_firebaseAuth.currentUser!.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

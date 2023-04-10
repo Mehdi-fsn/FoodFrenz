@@ -4,8 +4,10 @@ import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:foodfrenz/app/data/services/controllers/navigation_controller.dart';
 import 'package:foodfrenz/app/modules/home/widgets/components/detailed_carte_item_card.dart';
+import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_controller.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
 import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:foodfrenz/app/widgets/expandable_text_widget.dart';
@@ -15,16 +17,14 @@ class CarteItemDetailsPage extends StatelessWidget {
   CarteItemDetailsPage({Key? key, required this.item}) : super(key: key);
 
   final CarteItemModel item;
-  final ItemCountController countController = Get.put(ItemCountController());
+  final ShoppingCartController shoppingCartController = Get.find();
+  final ItemQuantityController quantityController =
+      Get.put(ItemQuantityController());
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: countController,
-      dispose: (_) {
-        // TODO: Implement dispose controller
-        // Get.delete<ItemCountController>();
-      },
+      init: quantityController,
       builder: (controller) {
         return Scaffold(
           body: Stack(
@@ -53,12 +53,14 @@ class CarteItemDetailsPage extends StatelessWidget {
                     AppIcon(
                       icon: Icons.arrow_back,
                       onTap: () {
+                        Get.delete<ItemQuantityController>();
                         Get.back();
                       },
                     ),
                     AppIcon(
                       icon: Icons.shopping_cart_outlined,
                       onTap: () {
+                        Get.delete<ItemQuantityController>();
                         Get.back();
                         Get.find<NavigationController>().changePage(2);
                         Get.toNamed(RoutePath.shoppingCartScreenPath, id: 1);
@@ -137,7 +139,7 @@ class CarteItemDetailsPage extends StatelessWidget {
                   child: Row(children: [
                     GestureDetector(
                       onTap: () {
-                        countController.decrement();
+                        quantityController.decrement();
                       },
                       child: const Icon(
                         Icons.remove,
@@ -147,7 +149,7 @@ class CarteItemDetailsPage extends StatelessWidget {
                     SizedBox(width: Dimensions.width10),
                     Obx(
                       () => Text(
-                        countController.count.value.toString(),
+                        quantityController.quantityValue.toString(),
                         style: TextStyle(
                             fontSize: Dimensions.textSizeLarge,
                             color: AppColors.textColor),
@@ -156,7 +158,7 @@ class CarteItemDetailsPage extends StatelessWidget {
                     SizedBox(width: Dimensions.width10),
                     GestureDetector(
                       onTap: () {
-                        countController.increment();
+                        quantityController.increment();
                       },
                       child: const Icon(
                         Icons.add,
@@ -165,23 +167,31 @@ class CarteItemDetailsPage extends StatelessWidget {
                     ),
                   ]),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width45,
-                    vertical: Dimensions.height15,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Get.isDarkMode
-                        ? AppColors.mainDarkColor
-                        : AppColors.mainColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      Constants.addToCart,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimensions.textSizeLarge,
+                GestureDetector(
+                  onTap: () {
+                    shoppingCartController.addToCart(
+                        ShoppingCartItemModel.fromCarteItemModel(
+                            item, quantityController.quantityValue));
+                    quantityController.reset();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.width45,
+                      vertical: Dimensions.height15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Get.isDarkMode
+                          ? AppColors.mainDarkColor
+                          : AppColors.mainColor,
+                      borderRadius: BorderRadius.circular(Dimensions.radius20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        Constants.addToCart,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Dimensions.textSizeLarge,
+                        ),
                       ),
                     ),
                   ),
@@ -195,18 +205,24 @@ class CarteItemDetailsPage extends StatelessWidget {
   }
 }
 
-class ItemCountController extends GetxController {
-  var count = 1.obs;
+class ItemQuantityController extends GetxController {
+  var quantity = 1.obs;
+
+  int get quantityValue => quantity.value;
 
   void increment() {
-    if (count.value < 10) {
-      count++;
+    if (quantity.value < 10) {
+      quantity++;
     }
   }
 
   void decrement() {
-    if (count.value > 1) {
-      count--;
+    if (quantity.value > 1) {
+      quantity--;
     }
+  }
+
+  void reset() {
+    quantity.value = 1;
   }
 }

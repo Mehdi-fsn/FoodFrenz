@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:get/get.dart';
 
 class CloudFirestoreProvider {
   Stream<List<CarteItemModel>> getAppetizers() {
@@ -39,6 +41,53 @@ class CloudFirestoreProvider {
         },
       ).toList();
     });
+  }
+
+  Stream<List<ShoppingCartItemModel>> getCart(String userId) {
+    return FirebaseFirestore.instance
+        .collection('carts')
+        .doc(userId)
+        .snapshots()
+        .map((doc) {
+      return doc.get('items').map<ShoppingCartItemModel>(
+        (item) {
+          return ShoppingCartItemModel.fromJson(item);
+        },
+      ).toList();
+    });
+  }
+
+  Future<void> addToCart(String userId, ShoppingCartItemModel item) async {
+    CollectionReference carts = FirebaseFirestore.instance.collection('carts');
+    DocumentReference cartRef = carts.doc(userId);
+
+    DocumentSnapshot cartSnapshot = await cartRef.get();
+
+    bool itemExists = false;
+    int existingItemIndex = -1;
+    List<dynamic> items = cartSnapshot.get('items');
+
+    for (int i = 0; i < items.length; i++) {
+      if (items[i]['id'] == item.id) {
+        itemExists = true;
+        existingItemIndex = i;
+        break;
+      }
+    }
+
+    try {
+      if (itemExists) {
+        items[existingItemIndex]['quantity'] += item.quantity;
+        await cartRef.update({'items': items});
+      } else {
+        await cartRef.update({
+          'items': FieldValue.arrayUnion([item.toJson()])
+        });
+      }
+      Get.snackbar('Success', 'Item has been successfully added to cart');
+    } on FirebaseException catch (e) {
+      Get.snackbar("Error", e.message!);
+    }
   }
 
   Future<void> createEmptyCart(String userId) async {

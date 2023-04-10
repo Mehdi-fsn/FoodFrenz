@@ -6,10 +6,9 @@ import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:get/get.dart';
 
 class ShoppingCartItemCard extends StatelessWidget {
-  const ShoppingCartItemCard({Key? key, required this.products})
-      : super(key: key);
+  const ShoppingCartItemCard({Key? key, required this.item}) : super(key: key);
 
-  final ShoppingCartItemModel products;
+  final ShoppingCartItemModel item;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class ShoppingCartItemCard extends StatelessWidget {
           aspectRatio: 1,
           child: CachedNetworkImage(
             fit: BoxFit.cover,
-            imageUrl: products.item.image,
+            imageUrl: item.image,
           ),
         ),
         SizedBox(width: Dimensions.width10),
@@ -31,7 +30,7 @@ class ShoppingCartItemCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              products.item.name,
+              item.name,
               style: TextStyle(
                 fontSize: Dimensions.textSizeLarge,
                 color: Get.theme.colorScheme.onBackground,
@@ -41,7 +40,7 @@ class ShoppingCartItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '\$${products.item.price.toString()}',
+                  '\$${item.price.toString()}',
                   style: TextStyle(
                     fontSize: Dimensions.textSizeMedium,
                     color: Get.theme.colorScheme.onBackground,
@@ -69,7 +68,7 @@ class ShoppingCartItemCard extends StatelessWidget {
                     SizedBox(width: Dimensions.width10),
                     Obx(
                       () => Text(
-                        products.quantity.toString(),
+                        item.quantity.toString(),
                         style: TextStyle(
                             fontSize: Dimensions.textSizeLarge,
                             color: AppColors.textColor),
