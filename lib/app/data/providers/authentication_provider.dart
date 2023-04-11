@@ -40,8 +40,7 @@ class AuthenticationProvider {
 
     try {
       await _firebaseAuth.signInWithCredential(credential);
-      await _cloudFirestoreProvider
-          .createEmptyCart(_firebaseAuth.currentUser!.uid);
+      await createEmptyCollectionToNewUser();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -53,8 +52,7 @@ class AuthenticationProvider {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await _cloudFirestoreProvider
-          .createEmptyCart(_firebaseAuth.currentUser!.uid);
+      await createEmptyCollectionToNewUser();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -68,5 +66,11 @@ class AuthenticationProvider {
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
+  }
+
+  Future<void> createEmptyCollectionToNewUser() async {
+    var userId = _firebaseAuth.currentUser!.uid;
+    await _cloudFirestoreProvider.createEmptyCart(userId);
+    await _cloudFirestoreProvider.createEmptyOrderHistory(userId);
   }
 }

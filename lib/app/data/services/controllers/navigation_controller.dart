@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/modules/home/home_binding.dart';
 import 'package:foodfrenz/app/modules/home/home_screen.dart';
-import 'package:foodfrenz/app/modules/order/order_screen.dart';
+import 'package:foodfrenz/app/modules/order_history/orders_history_binding.dart';
+import 'package:foodfrenz/app/modules/order_history/orders_history_screen.dart';
 import 'package:foodfrenz/app/modules/profile/profile_screen.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_screen.dart';
 import 'package:foodfrenz/app/routes/route_path.dart';
@@ -28,7 +29,8 @@ class NavigationController extends GetxController {
       case RoutePath.orderScreenPath:
         return GetPageRoute(
           settings: settings,
-          page: () => const OrderScreen(),
+          page: () => const OrdersHistoryScreen(),
+          binding: OrdersHistoryBinding(),
         );
       case RoutePath.shoppingCartScreenPath:
         return GetPageRoute(
