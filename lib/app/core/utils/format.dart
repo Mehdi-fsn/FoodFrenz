@@ -13,6 +13,17 @@ class Format {
     }
   }
 
+  static String formatStatusOrderToString(StatusOrder status) {
+    switch (status) {
+      case StatusOrder.cancelled:
+        return 'Cancelled';
+      case StatusOrder.pending:
+        return 'Pending';
+      case StatusOrder.delivered:
+        return 'Delivered';
+    }
+  }
+
   static String formatNumber(int number) {
     if (number < 1000) {
       return number.toString();

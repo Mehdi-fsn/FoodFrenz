@@ -16,4 +16,12 @@ class OrdersHistoryController extends GetxController {
     super.onInit();
     ordersHistory.bindStream(ordersHistoryRepository.getOrdersHistory(userId));
   }
+
+  int totalOrderQuantity(OrderItemModel order) {
+    int total = 0;
+    for (var element in order.items) {
+      total += element.quantity;
+    }
+    return total;
+  }
 }

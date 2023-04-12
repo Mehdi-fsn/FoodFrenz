@@ -1,3 +1,4 @@
+import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:foodfrenz/app/data/providers/cloud_firestore_provider.dart';
 
@@ -21,5 +22,9 @@ class ShoppingCartRepository {
   Future<void> updateItemQuantity(
       String userId, ShoppingCartItemModel item) async {
     await cloudFirestoreProvider.updateItemQuantity(userId, item);
+  }
+
+  Future<void> placeOrder(String userId, OrderItemModel item) async {
+    await cloudFirestoreProvider.placeOrder(userId, item);
   }
 }

@@ -143,6 +143,24 @@ class CloudFirestoreProvider {
     });
   }
 
+  Future<void> placeOrder(String userId, OrderItemModel order) async {
+    CollectionReference orders = _firestore.collection('orders');
+    DocumentReference orderRef = orders.doc(userId);
+
+    DocumentSnapshot orderSnapshot = await orderRef.get();
+
+    try {
+      List<dynamic> existingOrders = orderSnapshot.get('orders');
+      existingOrders.insertAll(0, [order.toJson()]);
+      await orderRef.update({
+        'orders': existingOrders,
+      });
+      Get.snackbar('Success', 'Order has been successfully placed');
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to place order');
+    }
+  }
+
   Future<void> createEmptyOrderHistory(String userId) async {
     bool exists = await checkIfOrdersHistoryExists(userId);
     if (!exists) {

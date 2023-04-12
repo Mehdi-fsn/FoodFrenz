@@ -101,11 +101,16 @@ class ShoppingCartScreen extends GetView<ShoppingCartController> {
                         : AppColors.mainColor,
                     borderRadius: BorderRadius.circular(Dimensions.radius10),
                   ),
-                  child: Text(
-                    "Check Out",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Dimensions.textSizeLarge,
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.placeOrder();
+                    },
+                    child: Text(
+                      "Check Out",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimensions.textSizeLarge,
+                      ),
                     ),
                   ),
                 )
