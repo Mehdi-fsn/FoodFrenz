@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
+import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:get/get.dart';
 
@@ -59,8 +60,8 @@ class CloudFirestoreProvider {
   }
 
   Future<bool> checkIfCartExists(String userId) async {
-    CollectionReference carts = _firestore.collection('carts');
-    DocumentSnapshot cart = await carts.doc(userId).get();
+    DocumentSnapshot cart =
+        await _firestore.collection('carts').doc(userId).get();
     return cart.exists;
   }
 
@@ -129,5 +130,48 @@ class CloudFirestoreProvider {
     } on FirebaseException catch (_) {
       Get.snackbar("Error", 'Failed to update item quantity');
     }
+  }
+
+  // Orders
+  Stream<List<OrderItemModel>> getOrdersHistory(String userId) {
+    return _firestore.collection('orders').doc(userId).snapshots().map((doc) {
+      return doc.get('orders').map<OrderItemModel>(
+        (order) {
+          return OrderItemModel.fromJson(order);
+        },
+      ).toList();
+    });
+  }
+
+  Future<void> placeOrder(String userId, OrderItemModel order) async {
+    CollectionReference orders = _firestore.collection('orders');
+    DocumentReference orderRef = orders.doc(userId);
+
+    DocumentSnapshot orderSnapshot = await orderRef.get();
+
+    try {
+      List<dynamic> existingOrders = orderSnapshot.get('orders');
+      existingOrders.insertAll(0, [order.toJson()]);
+      await orderRef.update({
+        'orders': existingOrders,
+      });
+      Get.snackbar('Success', 'Order has been successfully placed');
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to place order');
+    }
+  }
+
+  Future<void> createEmptyOrderHistory(String userId) async {
+    bool exists = await checkIfOrdersHistoryExists(userId);
+    if (!exists) {
+      CollectionReference carts = _firestore.collection('orders');
+      await carts.doc(userId).set({'orders': []});
+    }
+  }
+
+  Future<bool> checkIfOrdersHistoryExists(String userId) async {
+    DocumentSnapshot order =
+        await _firestore.collection('orders').doc(userId).get();
+    return order.exists;
   }
 }

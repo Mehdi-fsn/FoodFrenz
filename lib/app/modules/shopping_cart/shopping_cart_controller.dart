@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foodfrenz/app/core/utils/generate_random_order_id.dart';
+import 'package:foodfrenz/app/data/enums.dart';
+import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_repository.dart';
@@ -57,4 +61,15 @@ class ShoppingCartController extends GetxController {
   String get totalItems => shoppingCart
       .fold(0, (previousValue, element) => previousValue + element.quantity)
       .toString();
+
+  Future<void> placeOrder() async {
+    final OrderItemModel item = OrderItemModel(
+      id: generateRandomOrderId(),
+      date: Timestamp.now().toDate(),
+      status: StatusOrder.pending,
+      items: shoppingCart,
+      total: double.parse(totalPrice),
+    );
+    await shoppingCartRepository.placeOrder(userId, item);
+  }
 }
