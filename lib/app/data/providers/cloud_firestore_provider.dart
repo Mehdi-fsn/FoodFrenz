@@ -1,12 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:foodfrenz/app/data/models/user_model.dart';
+import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:get/get.dart';
 
 class CloudFirestoreProvider {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // User
+  Future<void> createUser() async {
+    final User user = Get.find<AuthenticationController>().user!;
+    final isExists = await isUserExists(user.uid);
+    if (!isExists) {
+      CollectionReference users = _firestore.collection('users');
+      await users.doc(user.uid).set({
+        'createdAt': Timestamp.now(),
+        'address': {},
+        'transactions': 0,
+        'spending': 0,
+      });
+    }
+  }
+
+  Future<bool> isUserExists(String userId) async {
+    DocumentSnapshot documentSnapshot =
+        await _firestore.collection('users').doc(userId).get();
+    return documentSnapshot.exists;
+  }
+
+  Stream<UserModel> getUser(String userId) {
+    return _firestore.collection('users').doc(userId).snapshots().map(
+      (doc) {
+        return UserModel.fromJson(doc.data()!, userId: doc.id);
+      },
+    );
+  }
+
+  // Home Page
   Stream<List<CarteItemModel>> getAppetizers() {
     return _firestore.collection('appetizers').snapshots().map((querySnapshot) {
       return querySnapshot.docs.map(
@@ -41,16 +74,6 @@ class CloudFirestoreProvider {
   }
 
   // Shopping Cart
-  Stream<List<ShoppingCartItemModel>> getCart(String userId) {
-    return _firestore.collection('carts').doc(userId).snapshots().map((doc) {
-      return doc.get('items').map<ShoppingCartItemModel>(
-        (item) {
-          return ShoppingCartItemModel.fromJson(item);
-        },
-      ).toList();
-    });
-  }
-
   Future<void> createEmptyCart(String userId) async {
     bool exists = await checkIfCartExists(userId);
     if (!exists) {
@@ -63,6 +86,16 @@ class CloudFirestoreProvider {
     DocumentSnapshot cart =
         await _firestore.collection('carts').doc(userId).get();
     return cart.exists;
+  }
+
+  Stream<List<ShoppingCartItemModel>> getCart(String userId) {
+    return _firestore.collection('carts').doc(userId).snapshots().map((doc) {
+      return doc.get('items').map<ShoppingCartItemModel>(
+        (item) {
+          return ShoppingCartItemModel.fromJson(item);
+        },
+      ).toList();
+    });
   }
 
   Future<void> addToCart(String userId, ShoppingCartItemModel item) async {
@@ -133,6 +166,20 @@ class CloudFirestoreProvider {
   }
 
   // Orders
+  Future<void> createEmptyOrderHistory(String userId) async {
+    bool exists = await checkIfOrdersHistoryExists(userId);
+    if (!exists) {
+      CollectionReference carts = _firestore.collection('orders');
+      await carts.doc(userId).set({'orders': []});
+    }
+  }
+
+  Future<bool> checkIfOrdersHistoryExists(String userId) async {
+    DocumentSnapshot order =
+        await _firestore.collection('orders').doc(userId).get();
+    return order.exists;
+  }
+
   Stream<List<OrderItemModel>> getOrdersHistory(String userId) {
     return _firestore.collection('orders').doc(userId).snapshots().map((doc) {
       return doc.get('orders').map<OrderItemModel>(
@@ -159,19 +206,5 @@ class CloudFirestoreProvider {
     } on FirebaseException catch (_) {
       Get.snackbar("Error", 'Failed to place order');
     }
-  }
-
-  Future<void> createEmptyOrderHistory(String userId) async {
-    bool exists = await checkIfOrdersHistoryExists(userId);
-    if (!exists) {
-      CollectionReference carts = _firestore.collection('orders');
-      await carts.doc(userId).set({'orders': []});
-    }
-  }
-
-  Future<bool> checkIfOrdersHistoryExists(String userId) async {
-    DocumentSnapshot order =
-        await _firestore.collection('orders').doc(userId).get();
-    return order.exists;
   }
 }

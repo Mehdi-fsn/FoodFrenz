@@ -88,6 +88,9 @@ class OrderItemCard extends GetView<OrdersHistoryController> {
             ),
             child: ListView.builder(
               shrinkWrap: true,
+              physics: item.items.length < 3
+                  ? const NeverScrollableScrollPhysics()
+                  : const AlwaysScrollableScrollPhysics(),
               itemCount: item.items.length,
               itemBuilder: (_, int index) {
                 return _buildCardItemFood(item.items[index]);
