@@ -15,39 +15,41 @@ class ProfileScreen extends GetView<ProfileController> {
     return SafeArea(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: Dimensions.width15),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  Constants.profile,
-                  style: TextStyle(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    Constants.profile,
+                    style: TextStyle(
+                        color: Get.isDarkMode
+                            ? AppColors.mainDarkColor
+                            : AppColors.mainColor,
+                        fontSize: Dimensions.textSize30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    width: Dimensions.height45,
+                    height: Dimensions.height45,
+                    decoration: BoxDecoration(
                       color: Get.isDarkMode
                           ? AppColors.mainDarkColor
                           : AppColors.mainColor,
-                      fontSize: Dimensions.textSize30,
-                      fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  width: Dimensions.height45,
-                  height: Dimensions.height45,
-                  decoration: BoxDecoration(
-                    color: Get.isDarkMode
-                        ? AppColors.mainDarkColor
-                        : AppColors.mainColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radius10),
+                      borderRadius: BorderRadius.circular(Dimensions.radius10),
+                    ),
+                    child: Icon(Icons.edit,
+                        color: Get.isDarkMode ? Colors.black87 : Colors.white),
                   ),
-                  child: Icon(Icons.edit,
-                      color: Get.isDarkMode ? Colors.black87 : Colors.white),
-                ),
-              ],
-            ),
-            const GlobalInformationView(),
-            SizedBox(height: Dimensions.height15),
-            const SettingsView(),
-          ],
+                ],
+              ),
+              const GlobalInformationView(),
+              SizedBox(height: Dimensions.height15),
+              const SettingsView(),
+            ],
+          ),
         ),
       ),
     );

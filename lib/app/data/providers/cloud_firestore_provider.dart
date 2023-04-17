@@ -39,6 +39,24 @@ class CloudFirestoreProvider {
     );
   }
 
+  Stream<User?> get userChanges => FirebaseAuth.instance.userChanges();
+
+  Future<void> updateUserProfile(String? displayName, String? email) async {
+    final User user = FirebaseAuth.instance.currentUser!;
+    try {
+      if (displayName != null) {
+        await user.updateDisplayName(displayName);
+      }
+      if (email != null) {
+        await user.updateEmail(email);
+      }
+      user.reload();
+      Get.snackbar("Success", "Your profile has been updated");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
   // Home Page
   Stream<List<CarteItemModel>> getAppetizers() {
     return _firestore.collection('appetizers').snapshots().map((querySnapshot) {

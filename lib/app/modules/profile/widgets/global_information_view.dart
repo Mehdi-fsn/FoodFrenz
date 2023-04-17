@@ -24,7 +24,7 @@ class GlobalInformationView extends GetView<ProfileController> {
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: CachedNetworkImage(
-                    imageUrl: controller.userAuth.photoURL ?? '',
+                    imageUrl: controller.userChanges.value!.photoURL ?? '',
                     imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         borderRadius:
@@ -58,8 +58,8 @@ class GlobalInformationView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    controller.userAuth.displayName ??
-                        controller.userAuth.email!.split('@').first,
+                    controller.userChanges.value!.displayName ??
+                        controller.userChanges.value!.email!.split('@').first,
                     style: TextStyle(
                       color: Get.theme.colorScheme.onBackground,
                       fontSize: Dimensions.textSizeLarge,
@@ -67,7 +67,7 @@ class GlobalInformationView extends GetView<ProfileController> {
                     ),
                   ),
                   Text(
-                    controller.userAuth.email!,
+                    controller.userChanges.value!.email!,
                     style: TextStyle(
                       color: AppColors.paraColor,
                       fontSize: Dimensions.textSizeSmall,

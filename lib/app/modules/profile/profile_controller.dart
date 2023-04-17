@@ -9,7 +9,8 @@ class ProfileController extends GetxController {
 
   ProfileController({required this.profileRepository});
 
-  final User userAuth = Get.find<AuthenticationController>().user!;
+  final String userId = Get.find<AuthenticationController>().user!.uid;
+  final userChanges = Rx<User?>(null);
   final Rx<UserInfoModel> userInfo = UserInfoModel(
           createdAt: DateTime.now(), address: {}, transactions: 0, spending: 0)
       .obs;
@@ -17,6 +18,10 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    userInfo.bindStream(profileRepository.getUser(userAuth.uid));
+    userChanges.bindStream(profileRepository.userChanges);
+    userInfo.bindStream(profileRepository.getUser(userId));
   }
+
+  Future<void> updateUserProfile({String? displayName, String? email}) =>
+      profileRepository.updateUserProfile(displayName, email);
 }
