@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
+import 'package:foodfrenz/app/modules/profile/pages/address_location_page.dart';
+import 'package:foodfrenz/app/modules/profile/pages/informations_page.dart';
+import 'package:foodfrenz/app/modules/profile/pages/payment_settings_page.dart';
 import 'package:foodfrenz/app/modules/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +19,13 @@ class SettingsView extends GetView<ProfileController> {
           title: const Text('Informations'),
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
-          onTap: () {},
+          onTap: () {
+            Get.dialog(
+              InformationsPage(),
+              useSafeArea: true,
+              barrierDismissible: false,
+            );
+          },
         ),
         Divider(
           height: 0,
@@ -25,10 +34,16 @@ class SettingsView extends GetView<ProfileController> {
         ),
         ListTile(
           leading: const Icon(Icons.location_on),
-          title: const Text('Address localisation'),
+          title: const Text('Address location'),
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
-          onTap: () {},
+          onTap: () {
+            Get.dialog(
+              const AddressLocationPage(),
+              useSafeArea: true,
+              barrierDismissible: false,
+            );
+          },
         ),
         Divider(
           height: 0,
@@ -40,7 +55,13 @@ class SettingsView extends GetView<ProfileController> {
           title: const Text('Payment Settings'),
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
-          onTap: () {},
+          onTap: () {
+            Get.dialog(
+              const PaymentSettingsPage(),
+              useSafeArea: true,
+              barrierDismissible: false,
+            );
+          },
         ),
         Divider(
           height: 0,
