@@ -5,7 +5,7 @@ String timeDifference(DateTime date) {
   } else if (difference.inDays > 30) {
     return '${(difference.inDays / 30).floor()}m';
   } else if (difference.inDays >= 7) {
-    return '${(difference.inDays / 7).floor()}w';
+    return '${(difference.inDays / 7).floor()}w ${difference.inDays % 7}d';
   } else if (difference.inDays > 0) {
     return '${difference.inDays}d';
   } else {
