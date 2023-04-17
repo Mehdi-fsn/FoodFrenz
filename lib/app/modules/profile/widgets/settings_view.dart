@@ -40,7 +40,7 @@ class SettingsView extends GetView<ProfileController> {
           onTap: () {
             Get.dialog(
               const AddressLocationPage(),
-              useSafeArea: true,
+              useSafeArea: false,
               barrierDismissible: false,
             );
           },
@@ -58,7 +58,7 @@ class SettingsView extends GetView<ProfileController> {
           onTap: () {
             Get.dialog(
               const PaymentSettingsPage(),
-              useSafeArea: true,
+              useSafeArea: false,
               barrierDismissible: false,
             );
           },

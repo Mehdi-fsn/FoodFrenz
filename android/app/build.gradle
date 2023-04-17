@@ -54,6 +54,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // Google Maps Settings
+        resConfigs "en"
     }
 
     buildTypes {
