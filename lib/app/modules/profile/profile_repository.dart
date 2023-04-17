@@ -12,6 +12,9 @@ class ProfileRepository {
 
   Stream<User?> get userChanges => cloudFirestoreProvider.userChanges;
 
-  Future<void> updateUserProfile(String? displayName, String? email) =>
-      cloudFirestoreProvider.updateUserProfile(displayName, email);
+  Future<void> updateUserAuthProfile(String? displayName, String? email) =>
+      cloudFirestoreProvider.updateUserAuthProfile(displayName, email);
+
+  Future<void> updateUserInfoProfile(String userId, UserInfoModel userInfo) =>
+      cloudFirestoreProvider.updateUserInfoProfile(userId, userInfo);
 }

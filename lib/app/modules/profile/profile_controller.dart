@@ -16,12 +16,15 @@ class ProfileController extends GetxController {
       .obs;
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
     userChanges.bindStream(profileRepository.userChanges);
     userInfo.bindStream(profileRepository.getUser(userId));
+    super.onReady();
   }
 
-  Future<void> updateUserProfile({String? displayName, String? email}) =>
-      profileRepository.updateUserProfile(displayName, email);
+  Future<void> updateUserAuthProfile({String? displayName, String? email}) =>
+      profileRepository.updateUserAuthProfile(displayName, email);
+
+  Future<void> updateUserInfoProfile(UserInfoModel userInfo) =>
+      profileRepository.updateUserInfoProfile(userId, userInfo);
 }

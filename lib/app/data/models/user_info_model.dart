@@ -29,4 +29,18 @@ class UserInfoModel {
       'spending': spending,
     };
   }
+
+  UserInfoModel copyWith({
+    DateTime? createdAt,
+    Map<String, dynamic>? address,
+    int? transactions,
+    num? spending,
+  }) {
+    return UserInfoModel(
+      createdAt: createdAt ?? this.createdAt,
+      address: address ?? this.address,
+      transactions: transactions ?? this.transactions,
+      spending: spending ?? this.spending,
+    );
+  }
 }

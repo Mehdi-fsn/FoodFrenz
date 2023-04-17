@@ -12,94 +12,100 @@ class GlobalInformationView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                height: Dimensions.height110,
-                padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.width10,
-                    vertical: Dimensions.height10),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: controller.userChanges.value!.photoURL ?? '',
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radius15),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
+      () => controller.userChanges.value != null
+          ? Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: Dimensions.height110,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Dimensions.width10,
+                          vertical: Dimensions.height10),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              controller.userChanges.value!.photoURL ?? '',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radius15),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) =>
+                              const SizedBox.shrink(),
+                          errorWidget: (context, url, error) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radius15),
+                              color: Get.isDarkMode
+                                  ? AppColors.mainDarkColor
+                                  : AppColors.mainColor,
+                            ),
+                            child: Icon(
+                              Icons.person,
+                              size: Dimensions.iconSize30,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    placeholder: (context, url) => const SizedBox.shrink(),
-                    errorWidget: (context, url, error) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radius15),
-                        color: Get.isDarkMode
-                            ? AppColors.mainDarkColor
-                            : AppColors.mainColor,
+                    SizedBox(width: Dimensions.width15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          controller.userChanges.value!.displayName ??
+                              controller.userChanges.value!.email!
+                                  .split('@')
+                                  .first,
+                          style: TextStyle(
+                            color: Get.theme.colorScheme.onBackground,
+                            fontSize: Dimensions.textSizeLarge,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          controller.userChanges.value!.email!,
+                          style: TextStyle(
+                            color: AppColors.paraColor,
+                            fontSize: Dimensions.textSizeSmall,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: Dimensions.width15),
+                  height: Dimensions.height70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildRichText(
+                        timeDifference(controller.userInfo.value.createdAt),
+                        'Member Since',
                       ),
-                      child: Icon(
-                        Icons.person,
-                        size: Dimensions.iconSize30,
-                        color: Colors.white,
+                      _buildRichText(
+                        controller.userInfo.value.transactions.toString(),
+                        'Transactions',
                       ),
-                    ),
+                      _buildRichText(
+                        '\$${controller.userInfo.value.spending.toStringAsFixed(2)}',
+                        'Spending',
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              SizedBox(width: Dimensions.width15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    controller.userChanges.value!.displayName ??
-                        controller.userChanges.value!.email!.split('@').first,
-                    style: TextStyle(
-                      color: Get.theme.colorScheme.onBackground,
-                      fontSize: Dimensions.textSizeLarge,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    controller.userChanges.value!.email!,
-                    style: TextStyle(
-                      color: AppColors.paraColor,
-                      fontSize: Dimensions.textSizeSmall,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: Dimensions.width15),
-            height: Dimensions.height70,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildRichText(
-                  timeDifference(controller.userInfo.value.createdAt),
-                  'Member Since',
-                ),
-                _buildRichText(
-                  controller.userInfo.value.transactions.toString(),
-                  'Transactions',
-                ),
-                _buildRichText(
-                  '\$${controller.userInfo.value.spending.toStringAsFixed(2)}',
-                  'Spending',
-                ),
+                )
               ],
-            ),
-          )
-        ],
-      ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 

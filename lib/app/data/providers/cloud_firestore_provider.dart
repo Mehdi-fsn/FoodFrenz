@@ -41,7 +41,7 @@ class CloudFirestoreProvider {
 
   Stream<User?> get userChanges => FirebaseAuth.instance.userChanges();
 
-  Future<void> updateUserProfile(String? displayName, String? email) async {
+  Future<void> updateUserAuthProfile(String? displayName, String? email) async {
     final User user = FirebaseAuth.instance.currentUser!;
     try {
       if (displayName != null) {
@@ -50,8 +50,18 @@ class CloudFirestoreProvider {
       if (email != null) {
         await user.updateEmail(email);
       }
-      user.reload();
       Get.snackbar("Success", "Your profile has been updated");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> updateUserInfoProfile(String userId, UserInfoModel user) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    try {
+      await userRef.update(user.toJson());
     } catch (e) {
       Get.snackbar("Error", e.toString());
     }

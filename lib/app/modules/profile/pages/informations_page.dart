@@ -67,14 +67,17 @@ class InformationsPage extends StatelessWidget {
                               onPressed: () async {
                                 if (nameTextController.text != name) {
                                   if (emailTextController.text != email) {
-                                    await profileController.updateUserProfile(
-                                        displayName: nameTextController.text,
-                                        email: emailTextController.text);
+                                    await profileController
+                                        .updateUserAuthProfile(
+                                            displayName:
+                                                nameTextController.text,
+                                            email: emailTextController.text);
                                   }
                                 } else {
                                   if (emailTextController.text != email) {
-                                    await profileController.updateUserProfile(
-                                        email: emailTextController.text);
+                                    await profileController
+                                        .updateUserAuthProfile(
+                                            email: emailTextController.text);
                                   }
                                 }
                                 editingController.isEditing.value = false;
@@ -85,6 +88,7 @@ class InformationsPage extends StatelessWidget {
                                   color: Get.isDarkMode
                                       ? AppColors.mainDarkColor
                                       : AppColors.mainColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             )
