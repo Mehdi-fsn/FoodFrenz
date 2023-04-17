@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
-import 'package:foodfrenz/app/data/models/user_model.dart';
+import 'package:foodfrenz/app/data/models/user_info_model.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:get/get.dart';
 
@@ -31,10 +31,10 @@ class CloudFirestoreProvider {
     return documentSnapshot.exists;
   }
 
-  Stream<UserModel> getUser(String userId) {
+  Stream<UserInfoModel> getUser(String userId) {
     return _firestore.collection('users').doc(userId).snapshots().map(
       (doc) {
-        return UserModel.fromJson(doc.data()!, userId: doc.id);
+        return UserInfoModel.fromJson(doc.data()!, userId: doc.id);
       },
     );
   }
@@ -205,6 +205,37 @@ class CloudFirestoreProvider {
       Get.snackbar('Success', 'Order has been successfully placed');
     } on FirebaseException catch (_) {
       Get.snackbar("Error", 'Failed to place order');
+    }
+  }
+
+  Future<void> changeStatusOrder(
+      String userId, String orderId, int status) async {
+    CollectionReference orders = _firestore.collection('orders');
+    DocumentReference orderRef = orders.doc(userId);
+
+    DocumentSnapshot orderSnapshot = await orderRef.get();
+
+    try {
+      List<dynamic> existingOrders = orderSnapshot.get('orders');
+      var orderIndex =
+          existingOrders.indexWhere((element) => element['id'] == orderId);
+      existingOrders[orderIndex]['status'] = status;
+      await orderRef.update({
+        'orders': existingOrders,
+      });
+      switch (status) {
+        case 0:
+          Get.snackbar('Success', 'Order has been successfully cancelled');
+          break;
+        case 1:
+          Get.snackbar('Success', 'Order is awaiting delivery');
+          break;
+        case 2:
+          Get.snackbar('Success', 'Order has been successfully delivered');
+          break;
+      }
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to update order');
     }
   }
 }

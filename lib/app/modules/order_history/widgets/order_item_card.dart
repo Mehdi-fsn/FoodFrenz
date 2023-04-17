@@ -141,22 +141,26 @@ class OrderItemCard extends GetView<OrdersHistoryController> {
                     horizontal: Dimensions.width15,
                     vertical: Dimensions.height10,
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        statusIcon[item.status.index],
-                        size: Dimensions.iconSizeLarge,
-                        color: statusColor[item.status.index],
-                      ),
-                      SizedBox(width: Dimensions.width5),
-                      Text(
-                        Format.formatStatusOrderToString(item.status),
-                        style: TextStyle(
+                  child: GestureDetector(
+                    onTap: () => controller.changeStatusOrder(
+                        item.id, item.status.index),
+                    child: Row(
+                      children: [
+                        Icon(
+                          statusIcon[item.status.index],
+                          size: Dimensions.iconSizeLarge,
                           color: statusColor[item.status.index],
-                          fontSize: Dimensions.textSize11,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: Dimensions.width5),
+                        Text(
+                          Format.formatStatusOrderToString(item.status),
+                          style: TextStyle(
+                            color: statusColor[item.status.index],
+                            fontSize: Dimensions.textSize11,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
