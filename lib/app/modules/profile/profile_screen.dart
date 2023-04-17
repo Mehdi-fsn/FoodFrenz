@@ -40,7 +40,7 @@ class ProfileScreen extends GetView<ProfileController> {
                           : AppColors.mainColor,
                       borderRadius: BorderRadius.circular(Dimensions.radius10),
                     ),
-                    child: Icon(Icons.edit,
+                    child: Icon(Icons.person_outline,
                         color: Get.isDarkMode ? Colors.black87 : Colors.white),
                   ),
                 ],

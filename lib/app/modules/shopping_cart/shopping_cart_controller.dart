@@ -31,6 +31,10 @@ class ShoppingCartController extends GetxController {
     await shoppingCartRepository.removedItemInCart(userId, item);
   }
 
+  Future<void> clearCart() async {
+    await shoppingCartRepository.clearCart(userId);
+  }
+
   void updateItemQuantity(ShoppingCartItemModel item, int newQuantity) {
     if (newQuantity > 10) {
       return;
@@ -71,5 +75,6 @@ class ShoppingCartController extends GetxController {
       total: double.parse(totalPrice),
     );
     await shoppingCartRepository.placeOrder(userId, item);
+    clearCart();
   }
 }

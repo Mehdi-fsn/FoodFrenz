@@ -19,6 +19,10 @@ class ShoppingCartRepository {
     await cloudFirestoreProvider.removedItemInCart(userId, item);
   }
 
+  Future<void> clearCart(String userId) async {
+    await cloudFirestoreProvider.clearCart(userId);
+  }
+
   Future<void> updateItemQuantity(
       String userId, ShoppingCartItemModel item) async {
     await cloudFirestoreProvider.updateItemQuantity(userId, item);

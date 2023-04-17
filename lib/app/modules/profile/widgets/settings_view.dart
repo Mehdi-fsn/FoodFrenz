@@ -22,7 +22,7 @@ class SettingsView extends GetView<ProfileController> {
           onTap: () {
             Get.dialog(
               InformationsPage(),
-              useSafeArea: true,
+              useSafeArea: false,
               barrierDismissible: false,
             );
           },

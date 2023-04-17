@@ -12,6 +12,7 @@ class Constants {
   static const String addToCart = 'Add to cart';
   static const String showMore = 'Show more';
   static const String showLess = 'Show less';
+  static const String noOrdersYet = 'No orders yet';
 
   static const String comments = 'comments';
   static const String km = 'km';
