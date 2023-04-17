@@ -1,19 +1,19 @@
-class UserModel {
+class UserInfoModel {
   final DateTime createdAt;
   final Map<String, dynamic> address;
   final int transactions;
   final num spending;
 
-  UserModel({
+  UserInfoModel({
     required this.createdAt,
     required this.address,
     required this.transactions,
     required this.spending,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json,
+  factory UserInfoModel.fromJson(Map<String, dynamic> json,
       {required String userId}) {
-    return UserModel(
+    return UserInfoModel(
       createdAt: json['createdAt'].toDate(),
       address: json['address'],
       transactions: json['transactions'],

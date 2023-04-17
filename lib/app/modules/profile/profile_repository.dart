@@ -1,4 +1,4 @@
-import 'package:foodfrenz/app/data/models/user_model.dart';
+import 'package:foodfrenz/app/data/models/user_info_model.dart';
 import 'package:foodfrenz/app/data/providers/cloud_firestore_provider.dart';
 
 class ProfileRepository {
@@ -6,6 +6,6 @@ class ProfileRepository {
 
   ProfileRepository({required this.cloudFirestoreProvider});
 
-  Stream<UserModel> getUser(String userId) =>
+  Stream<UserInfoModel> getUser(String userId) =>
       cloudFirestoreProvider.getUser(userId);
 }
