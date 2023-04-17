@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foodfrenz/app/core/utils/pick_image.dart';
 import 'package:foodfrenz/app/data/models/user_info_model.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/modules/profile/profile_repository.dart';
@@ -22,9 +25,17 @@ class ProfileController extends GetxController {
     super.onReady();
   }
 
-  Future<void> updateUserAuthProfile({String? displayName, String? email}) =>
-      profileRepository.updateUserAuthProfile(displayName, email);
+  Future<void> updateUserAuthProfile(
+          {String? displayName, String? email, String? photoUrl}) =>
+      profileRepository.updateUserAuthProfile(displayName, email, photoUrl);
 
   Future<void> updateUserInfoProfile(UserInfoModel userInfo) =>
       profileRepository.updateUserInfoProfile(userId, userInfo);
+
+  Future<void> uploadProfileImage() async {
+    final File? image = await pickImageFromGallery();
+    final String imageUrl =
+        await profileRepository.uploadProfileImage(userId, image);
+    await updateUserAuthProfile(photoUrl: imageUrl);
+  }
 }

@@ -17,42 +17,69 @@ class GlobalInformationView extends GetView<ProfileController> {
               children: [
                 Row(
                   children: [
-                    Container(
+                    SizedBox(
                       height: Dimensions.height110,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: Dimensions.width10,
-                          vertical: Dimensions.height10),
                       child: AspectRatio(
                         aspectRatio: 1,
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              controller.userChanges.value!.photoURL ?? '',
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radius15),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.width10,
+                                  vertical: Dimensions.height10),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    controller.userChanges.value!.photoURL ??
+                                        '',
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.radius15),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    const SizedBox.shrink(),
+                                errorWidget: (context, url, error) => Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.radius15),
+                                    color: Get.isDarkMode
+                                        ? AppColors.mainDarkColor
+                                        : AppColors.mainColor,
+                                  ),
+                                  child: Icon(
+                                    Icons.person,
+                                    size: Dimensions.iconSize30,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          placeholder: (context, url) =>
-                              const SizedBox.shrink(),
-                          errorWidget: (context, url, error) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radius15),
-                              color: Get.isDarkMode
-                                  ? AppColors.mainDarkColor
-                                  : AppColors.mainColor,
-                            ),
-                            child: Icon(
-                              Icons.person,
-                              size: Dimensions.iconSize30,
-                              color: Colors.white,
-                            ),
-                          ),
+                            Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: GestureDetector(
+                                  onTap: () => controller.uploadProfileImage(),
+                                  child: Container(
+                                    width: Dimensions.width30,
+                                    height: Dimensions.width30,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[400],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: Dimensions.iconSizeSmall,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )),
+                          ],
                         ),
                       ),
                     ),

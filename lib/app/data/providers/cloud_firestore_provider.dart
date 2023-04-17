@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
@@ -10,7 +13,7 @@ import 'package:get/get.dart';
 class CloudFirestoreProvider {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // User
+  // -------- Region User --------
   Future<void> createUser() async {
     final User user = Get.find<AuthenticationController>().user!;
     final isExists = await isUserExists(user.uid);
@@ -41,7 +44,8 @@ class CloudFirestoreProvider {
 
   Stream<User?> get userChanges => FirebaseAuth.instance.userChanges();
 
-  Future<void> updateUserAuthProfile(String? displayName, String? email) async {
+  Future<void> updateUserAuthProfile(
+      String? displayName, String? email, String? photoUrl) async {
     final User user = FirebaseAuth.instance.currentUser!;
     try {
       if (displayName != null) {
@@ -49,6 +53,9 @@ class CloudFirestoreProvider {
       }
       if (email != null) {
         await user.updateEmail(email);
+      }
+      if (photoUrl != null) {
+        await user.updatePhotoURL(photoUrl);
       }
       Get.snackbar("Success", "Your profile has been updated");
     } catch (e) {
@@ -67,7 +74,9 @@ class CloudFirestoreProvider {
     }
   }
 
-  // Home Page
+  // -------- End Region User --------
+
+  // -------- Region Carte --------
   Stream<List<CarteItemModel>> getAppetizers() {
     return _firestore.collection('appetizers').snapshots().map((querySnapshot) {
       return querySnapshot.docs.map(
@@ -101,7 +110,9 @@ class CloudFirestoreProvider {
     });
   }
 
-  // Shopping Cart
+  // -------- End Region Carte --------
+
+  // -------- Region Shopping Cart --------
   Future<void> createEmptyCart(String userId) async {
     bool exists = await checkIfCartExists(userId);
     if (!exists) {
@@ -193,7 +204,20 @@ class CloudFirestoreProvider {
     }
   }
 
-  // Orders
+  Future<void> clearCart(String userId) async {
+    CollectionReference carts = _firestore.collection('carts');
+    DocumentReference cartRef = carts.doc(userId);
+
+    try {
+      await cartRef.update({'items': []});
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to clear cart');
+    }
+  }
+
+  // -------- End Region Shopping Cart --------
+
+  // -------- Region Orders --------
   Future<void> createEmptyOrderHistory(String userId) async {
     bool exists = await checkIfOrdersHistoryExists(userId);
     if (!exists) {
@@ -266,4 +290,19 @@ class CloudFirestoreProvider {
       Get.snackbar("Error", 'Failed to update order');
     }
   }
+
+  // -------- End Region Orders --------
+
+  // -------- Region Firebase Storage --------
+  Future<String> uploadProfileImage(String userId, File? image) async {
+    if (image == null) return '';
+
+    Reference reference =
+        FirebaseStorage.instance.ref().child('avatar/$userId.jpg');
+    UploadTask uploadTask = reference.putFile(image);
+
+    TaskSnapshot taskSnapshot = await uploadTask;
+    return await taskSnapshot.ref.getDownloadURL();
+  }
+// -------- End Region Firebase Storage --------
 }
