@@ -4,8 +4,8 @@ import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddressLocationPage extends StatelessWidget {
-  const AddressLocationPage({Key? key}) : super(key: key);
+class AddressLocationScreen extends StatelessWidget {
+  const AddressLocationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

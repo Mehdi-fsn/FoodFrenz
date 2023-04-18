@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
+import 'package:foodfrenz/app/modules/address_location/address_location_screen.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
-import 'package:foodfrenz/app/modules/profile/pages/address_location_page.dart';
 import 'package:foodfrenz/app/modules/profile/pages/informations_page.dart';
 import 'package:foodfrenz/app/modules/profile/pages/payment_settings_page.dart';
 import 'package:foodfrenz/app/modules/profile/profile_controller.dart';
@@ -38,11 +38,7 @@ class SettingsView extends GetView<ProfileController> {
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
           onTap: () {
-            Get.dialog(
-              const AddressLocationPage(),
-              useSafeArea: false,
-              barrierDismissible: false,
-            );
+            Get.to(() => const AddressLocationScreen());
           },
         ),
         Divider(

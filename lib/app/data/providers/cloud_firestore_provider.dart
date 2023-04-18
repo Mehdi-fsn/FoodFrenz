@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:foodfrenz/app/data/models/address_model.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
@@ -72,6 +73,18 @@ class CloudFirestoreProvider {
     } catch (e) {
       Get.snackbar("Error", e.toString());
     }
+  }
+
+  Future<AddressModel> getAddressLocation(String userId) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    final DocumentSnapshot userSnapshot = await userRef.get();
+    final Map<String, dynamic> doc =
+        userSnapshot.data()! as Map<String, dynamic>;
+
+    final AddressModel address = AddressModel.fromJson(doc['address']);
+    return address;
   }
 
   // -------- End Region User --------
