@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
+import 'package:foodfrenz/app/modules/address_location/address_location_binding.dart';
 import 'package:foodfrenz/app/modules/address_location/address_location_screen.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/modules/profile/pages/informations_page.dart';
@@ -38,7 +39,10 @@ class SettingsView extends GetView<ProfileController> {
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
           onTap: () {
-            Get.to(() => const AddressLocationScreen());
+            Get.to(
+              () => const AddressLocationScreen(),
+              binding: AddressLocationBinding(),
+            );
           },
         ),
         Divider(

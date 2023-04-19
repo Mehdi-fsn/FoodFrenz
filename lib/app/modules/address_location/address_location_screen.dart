@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
+import 'package:foodfrenz/app/modules/address_location/address_location_controller.dart';
+import 'package:foodfrenz/app/modules/address_location/pages/add_address_location.dart';
 import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddressLocationScreen extends StatelessWidget {
+class AddressLocationScreen extends GetView<AddressLocationController> {
   const AddressLocationScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +24,6 @@ class AddressLocationScreen extends StatelessWidget {
               child: const GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(43.607950, 3.886238),
-                  zoom: 16,
                 ),
               ),
             ),
@@ -56,12 +57,14 @@ class AddressLocationScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimensions.radius20),
                 ),
                 child: Center(
-                  child: Text(
-                    'Address Location',
-                    style: TextStyle(
-                      fontSize: Dimensions.textSizeLarge,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Get.to(
+                        const AddAddressLocation(),
+                      );
+                    },
+                    label: const Text('Add Address'),
+                    icon: const Icon(Icons.add),
                   ),
                 )),
           ),
