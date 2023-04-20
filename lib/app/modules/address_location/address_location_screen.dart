@@ -6,8 +6,10 @@ import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddressLocationScreen extends GetView<AddressLocationController> {
-  const AddressLocationScreen({Key? key}) : super(key: key);
+class AddressLocationScreen extends StatelessWidget {
+  AddressLocationScreen({Key? key}) : super(key: key);
+
+  final AddressLocationController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class AddressLocationScreen extends GetView<AddressLocationController> {
                   child: FloatingActionButton.extended(
                     onPressed: () {
                       Get.to(
-                        const AddAddressLocation(),
+                        () => const AddAddressLocation(),
                       );
                     },
                     label: const Text('Add Address'),

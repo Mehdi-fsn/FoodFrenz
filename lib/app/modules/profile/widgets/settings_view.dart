@@ -40,7 +40,7 @@ class SettingsView extends GetView<ProfileController> {
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
           onTap: () {
             Get.to(
-              () => const AddressLocationScreen(),
+              () => AddressLocationScreen(),
               binding: AddressLocationBinding(),
             );
           },

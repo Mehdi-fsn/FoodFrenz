@@ -22,14 +22,18 @@ class AddAddressLocation extends GetView<AddressLocationController> {
               mapToolbarEnabled: false,
               compassEnabled: false,
               zoomControlsEnabled: false,
-              markers: controller.marker.value != null
-                  ? {controller.marker.value!}
+              markers: controller.currentMarker.value != null
+                  ? {controller.currentMarker.value!}
                   : {},
               onMapCreated: (GoogleMapController mapController) {
                 controller.setMapController(mapController);
               },
               onTap: (LatLng latLng) {
-                controller.setCurrentLatLng(latLng);
+                if (controller.textFieldHasFocus.value) {
+                  controller.textFieldFocus.unfocus();
+                } else {
+                  controller.setCurrentLatLng(latLng);
+                }
               },
             ),
           ),
@@ -38,6 +42,7 @@ class AddAddressLocation extends GetView<AddressLocationController> {
             left: Dimensions.width10,
             right: Dimensions.width10,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppIcon(
@@ -51,37 +56,75 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                     margin: EdgeInsets.symmetric(
                       horizontal: Dimensions.width10,
                     ),
-                    child: TextField(
-                      controller: controller.textAddressController,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                          color: Get.isDarkMode
-                              ? AppColors.mainDarkColor
-                              : AppColors.mainColor,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Get.isDarkMode
-                              ? AppColors.mainDarkColor
-                              : AppColors.mainColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFfcf4e4),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: controller.textAddressController,
+                          focusNode: controller.textFieldFocus,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                              color: Get.isDarkMode
+                                  ? AppColors.mainDarkColor
+                                  : AppColors.mainColor,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Get.isDarkMode
+                                  ? AppColors.mainDarkColor
+                                  : AppColors.mainColor,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFfcf4e4),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFfcf4e4),
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
                           ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFfcf4e4),
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
+                        Obx(
+                          () => controller.textFieldHasFocus.value
+                              ? FutureBuilder(
+                                  future: controller.searchAddress(
+                                      controller.textAddressController.text),
+                                  builder: (_,
+                                      AsyncSnapshot<List<String>> snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return Center(
+                                          child: SpinKitThreeBounce(
+                                            color: Get.isDarkMode
+                                                ? AppColors.mainDarkColor
+                                                : AppColors.mainColor,
+                                          ),
+                                        );
+                                      default:
+                                        if (snapshot.hasError) {
+                                          return const SizedBox.shrink();
+                                        }
+                                        return ListView.builder(
+                                          itemBuilder: (_, index) {
+                                            return ListTile(
+                                              title:
+                                                  Text(snapshot.data![index]),
+                                            );
+                                          },
+                                        );
+                                    }
+                                  },
+                                )
+                              : const SizedBox.shrink(),
+                        )
+                      ],
                     ),
                   ),
                 ),

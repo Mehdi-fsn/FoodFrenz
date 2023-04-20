@@ -21,8 +21,10 @@ class AddressLocationController extends GetxController {
   final Rx<LatLng> currentLatLng = const LatLng(43.607950, 3.886238).obs;
   CameraPosition currentPosition = const CameraPosition(
     target: LatLng(43.607950, 3.886238),
+    zoom: 16.0,
   );
-  final Rx<Marker?> marker = Rx<Marker?>(null);
+  final Rx<Marker?> currentMarker = Rx<Marker?>(null);
+  final Rx<Placemark?> currentPlacemark = Rx<Placemark?>(null);
 
   final RxBool isLocationLoading = false.obs;
 
@@ -30,6 +32,8 @@ class AddressLocationController extends GetxController {
   void onReady() async {
     init();
     workerPositionChanged();
+    workerPlacemarkChanged();
+    onFocusChange();
     super.onReady();
   }
 
@@ -45,18 +49,53 @@ class AddressLocationController extends GetxController {
   //-- Region Worker --//
   void workerPositionChanged() {
     ever(currentLatLng, (latlng) async {
-      currentPosition = CameraPosition(
+      setCurrentPosition(CameraPosition(
         target: LatLng(latlng.latitude, latlng.longitude),
-      );
-      setMarker(latlng);
-      setTextAddressController(await getPlaceMark(latlng));
-      mapController.moveCamera(
-        CameraUpdate.newCameraPosition(currentPosition),
-      );
+        zoom: 16.0,
+      ));
+      setCurrentMarker(latlng);
+      setCurrentPlacemark(await getPlaceMark(latlng));
+      moveMapControllerToAddress(currentPosition);
+    });
+  }
+
+  void workerPlacemarkChanged() {
+    ever(currentPlacemark, (placemark) async {
+      if (placemark == null) return;
+      setTextAddressController(placemark);
     });
   }
 
   //-- End Region Worker --//
+
+  //-- Region Methods --//
+  Future<List<String>> searchAddress(String searchQuery) async {
+    try {
+      List<Location> locations = await locationFromAddress(searchQuery);
+      List<Future<String>> addressesFuture = locations.map((location) async {
+        final latlng = LatLng(location.latitude, location.longitude);
+        final placemark = await getPlaceMark(latlng);
+        return convertLocationToAddress(placemark);
+      }).toList();
+
+      return await Future.wait(addressesFuture);
+    } catch (_) {
+      Get.snackbar("Error", "Error while searching address");
+      return [];
+    }
+  }
+
+  String convertLocationToAddress(Placemark placemark) {
+    return '${placemark.street!}, ${placemark.locality!}, ${placemark.postalCode!}, ${placemark.country!}';
+  }
+
+  void moveMapControllerToAddress(CameraPosition cameraPosition) async {
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(cameraPosition),
+    );
+  }
+
+  //-- End Region Methods --//
 
   //-- Region Getter --//
   Future<void> getCurrentLocation() async {
@@ -82,16 +121,24 @@ class AddressLocationController extends GetxController {
   //-- End Region Getter --//
 
   //-- Region Setter --//
+  void setCurrentPosition(CameraPosition cameraPosition) {
+    currentPosition = cameraPosition;
+  }
+
   void setCurrentLatLng(LatLng latLng) {
     currentLatLng.value = latLng;
   }
 
-  void setMarker(LatLng position) {
-    marker.value = Marker(
+  void setCurrentMarker(LatLng position) {
+    currentMarker.value = Marker(
       markerId: const MarkerId('marker'),
       position: LatLng(position.latitude, position.longitude),
       icon: BitmapDescriptor.defaultMarker,
     );
+  }
+
+  void setCurrentPlacemark(Placemark placemark) {
+    currentPlacemark.value = placemark;
   }
 
   //-- End Region Setter --//
@@ -104,10 +151,17 @@ class AddressLocationController extends GetxController {
   }
 
   final TextEditingController textAddressController = TextEditingController();
+  final FocusNode textFieldFocus = FocusNode();
+  final Rx<bool> textFieldHasFocus = false.obs;
 
   void setTextAddressController(Placemark placemark) {
-    textAddressController.text =
-        '${placemark.street!}, ${placemark.locality!}, ${placemark.postalCode!}, ${placemark.country!}';
+    textAddressController.text = convertLocationToAddress(placemark);
+  }
+
+  void onFocusChange() {
+    textFieldFocus.addListener(() {
+      textFieldHasFocus.value = textFieldFocus.hasFocus;
+    });
   }
 //-- End Region Various controllers--//
 }
