@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:foodfrenz/app/core/utils/determine_geolocation.dart';
 import 'package:foodfrenz/app/data/models/address_model.dart';
 import 'package:foodfrenz/app/modules/address_location/address_location_repository.dart';
@@ -9,6 +10,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart' as gws;
 
 class AddressLocationController extends GetxController {
   final AddressLocationRepository addressLocationRepository;
@@ -28,12 +30,12 @@ class AddressLocationController extends GetxController {
 
   final RxBool isLocationLoading = false.obs;
 
+  final String kGoogleApiKey = "AIzaSyBAceSg1tCTiK2W45dO9W2sjA924uT2oh8";
+
   @override
   void onReady() async {
     init();
     workerPositionChanged();
-    workerPlacemarkChanged();
-    onFocusChange();
     super.onReady();
   }
 
@@ -59,32 +61,9 @@ class AddressLocationController extends GetxController {
     });
   }
 
-  void workerPlacemarkChanged() {
-    ever(currentPlacemark, (placemark) async {
-      if (placemark == null) return;
-      setTextAddressController(placemark);
-    });
-  }
-
   //-- End Region Worker --//
 
   //-- Region Methods --//
-  Future<List<String>> searchAddress(String searchQuery) async {
-    try {
-      List<Location> locations = await locationFromAddress(searchQuery);
-      List<Future<String>> addressesFuture = locations.map((location) async {
-        final latlng = LatLng(location.latitude, location.longitude);
-        final placemark = await getPlaceMark(latlng);
-        return convertLocationToAddress(placemark);
-      }).toList();
-
-      return await Future.wait(addressesFuture);
-    } catch (_) {
-      Get.snackbar("Error", "Error while searching address");
-      return [];
-    }
-  }
-
   String convertLocationToAddress(Placemark placemark) {
     return '${placemark.street!}, ${placemark.locality!}, ${placemark.postalCode!}, ${placemark.country!}';
   }
@@ -93,6 +72,27 @@ class AddressLocationController extends GetxController {
     mapController.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
     );
+  }
+
+  void launchSearchAddress(BuildContext context) async {
+    gws.Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: kGoogleApiKey,
+      language: "fr",
+      decoration: InputDecoration(
+        hintText: 'Search',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      components: [gws.Component(gws.Component.country, "fr")],
+    );
+
+    if (p != null) {
+      List<Location> location = await locationFromAddress(p.description!);
+      setCurrentLatLng(LatLng(location[0].latitude, location[0].longitude));
+    }
   }
 
   //-- End Region Methods --//
@@ -148,20 +148,6 @@ class AddressLocationController extends GetxController {
 
   void setMapController(GoogleMapController mapController) {
     this.mapController = mapController;
-  }
-
-  final TextEditingController textAddressController = TextEditingController();
-  final FocusNode textFieldFocus = FocusNode();
-  final Rx<bool> textFieldHasFocus = false.obs;
-
-  void setTextAddressController(Placemark placemark) {
-    textAddressController.text = convertLocationToAddress(placemark);
-  }
-
-  void onFocusChange() {
-    textFieldFocus.addListener(() {
-      textFieldHasFocus.value = textFieldFocus.hasFocus;
-    });
   }
 //-- End Region Various controllers--//
 }

@@ -254,6 +254,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flutter_google_places:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.4.0"
+      resolved-ref: ce398afd78f1f340ed0673027cbb0687fdf48155
+      url: "https://github.com/fluttercommunity/flutter_google_places"
+    source: git
+    version: "0.3.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -392,6 +401,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  google_api_headers:
+    dependency: transitive
+    description:
+      name: google_api_headers
+      sha256: ac6f4e27e35c9eb4fbe8ce4ce7380e651d3a7bee3ad4c2ff30e67aaa73f005d3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0+1"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -432,6 +449,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.6"
+  google_maps_webservice:
+    dependency: "direct main"
+    description:
+      name: google_maps_webservice
+      sha256: d0ae4e4508afd74a3f051565261a3cdbae59db29448f9b6e6beb5674545e1eb7
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.20-nullsafety.5"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -473,7 +498,7 @@ packages:
     source: hosted
     version: "0.12.0"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
@@ -544,6 +569,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      sha256: c33da08e136c3df0190bd5bbe51ae1df4a7d96e7954d1d7249fea2968a72d317
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.0"
   lints:
     dependency: transitive
     description:
@@ -592,6 +625,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  package_info_plus:
+    dependency: transitive
+    description:
+      name: package_info_plus
+      sha256: cbff87676c352d97116af6dbea05aa28c4d65eb0f6d5677a520c11a69ca9a24d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   path:
     dependency: transitive
     description:
@@ -870,7 +919,7 @@ packages:
     source: hosted
     version: "3.0.5"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"

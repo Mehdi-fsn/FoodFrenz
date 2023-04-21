@@ -29,11 +29,7 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                 controller.setMapController(mapController);
               },
               onTap: (LatLng latLng) {
-                if (controller.textFieldHasFocus.value) {
-                  controller.textFieldFocus.unfocus();
-                } else {
-                  controller.setCurrentLatLng(latLng);
-                }
+                controller.setCurrentLatLng(latLng);
               },
             ),
           ),
@@ -51,88 +47,22 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                     Get.back();
                   },
                 ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: Dimensions.width10,
+                Row(
+                  children: [
+                    AppIcon(
+                      icon: Icons.location_searching_outlined,
+                      onTap: () {
+                        controller.getCurrentLocation();
+                      },
                     ),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: controller.textAddressController,
-                          focusNode: controller.textFieldFocus,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            hintStyle: TextStyle(
-                              color: Get.isDarkMode
-                                  ? AppColors.mainDarkColor
-                                  : AppColors.mainColor,
-                            ),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: Get.isDarkMode
-                                  ? AppColors.mainDarkColor
-                                  : AppColors.mainColor,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFfcf4e4),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFfcf4e4),
-                              ),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                        Obx(
-                          () => controller.textFieldHasFocus.value
-                              ? FutureBuilder(
-                                  future: controller.searchAddress(
-                                      controller.textAddressController.text),
-                                  builder: (_,
-                                      AsyncSnapshot<List<String>> snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.waiting:
-                                        return Center(
-                                          child: SpinKitThreeBounce(
-                                            color: Get.isDarkMode
-                                                ? AppColors.mainDarkColor
-                                                : AppColors.mainColor,
-                                          ),
-                                        );
-                                      default:
-                                        if (snapshot.hasError) {
-                                          return const SizedBox.shrink();
-                                        }
-                                        return ListView.builder(
-                                          itemBuilder: (_, index) {
-                                            return ListTile(
-                                              title:
-                                                  Text(snapshot.data![index]),
-                                            );
-                                          },
-                                        );
-                                    }
-                                  },
-                                )
-                              : const SizedBox.shrink(),
-                        )
-                      ],
+                    SizedBox(width: Dimensions.width10),
+                    AppIcon(
+                      icon: Icons.search,
+                      onTap: () {
+                        controller.launchSearchAddress(context);
+                      },
                     ),
-                  ),
-                ),
-                AppIcon(
-                  icon: Icons.location_searching_outlined,
-                  onTap: () {
-                    controller.getCurrentLocation();
-                  },
+                  ],
                 ),
               ],
             ),
@@ -148,7 +78,10 @@ class AddAddressLocation extends GetView<AddressLocationController> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.only(bottom: Dimensions.height20),
+              margin: EdgeInsets.only(
+                  bottom: Dimensions.height20,
+                  left: Dimensions.width10,
+                  right: Dimensions.width10),
               child: FloatingActionButton.extended(
                 onPressed: () {},
                 label: const Text('Add address'),

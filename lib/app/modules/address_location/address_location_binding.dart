@@ -6,7 +6,8 @@ class AddressLocationBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(
-        () => AddressLocationRepository(cloudFirestoreProvider: Get.find()));
+      () => AddressLocationRepository(cloudFirestoreProvider: Get.find()),
+    );
     Get.lazyPut(
         () => AddressLocationController(addressLocationRepository: Get.find()));
   }
