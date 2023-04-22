@@ -1,6 +1,8 @@
+import 'package:foodfrenz/app/data/models/address_model.dart';
+
 class UserInfoModel {
   final DateTime createdAt;
-  final Map<String, dynamic> address;
+  AddressModel address;
   final int transactions;
   final num spending;
 
@@ -15,7 +17,7 @@ class UserInfoModel {
       {required String userId}) {
     return UserInfoModel(
       createdAt: json['createdAt'].toDate(),
-      address: json['address'],
+      address: AddressModel.fromJson(json['address']),
       transactions: json['transactions'],
       spending: json['spending'],
     );
@@ -32,7 +34,7 @@ class UserInfoModel {
 
   UserInfoModel copyWith({
     DateTime? createdAt,
-    Map<String, dynamic>? address,
+    AddressModel? address,
     int? transactions,
     num? spending,
   }) {

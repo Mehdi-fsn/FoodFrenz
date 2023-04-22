@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:foodfrenz/app/core/utils/determine_geolocation.dart';
+import 'package:foodfrenz/app/data/enums.dart';
 import 'package:foodfrenz/app/data/models/address_model.dart';
 import 'package:foodfrenz/app/modules/address_location/address_location_repository.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
+import 'package:foodfrenz/app/modules/profile/profile_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -14,8 +16,11 @@ import 'package:google_maps_webservice/places.dart' as gws;
 
 class AddressLocationController extends GetxController {
   final AddressLocationRepository addressLocationRepository;
+  final ProfileController profileController;
 
-  AddressLocationController({required this.addressLocationRepository});
+  AddressLocationController(
+      {required this.addressLocationRepository,
+      required this.profileController});
 
   final String userId = Get.find<AuthenticationController>().user!.uid;
   final Rx<AddressModel> _addressModel = AddressModel().obs;
@@ -29,6 +34,7 @@ class AddressLocationController extends GetxController {
   final Rx<Placemark?> currentPlacemark = Rx<Placemark?>(null);
 
   final RxBool isLocationLoading = false.obs;
+  AddressLocationType selectedAddressLocationType = AddressLocationType.current;
 
   final String kGoogleApiKey = "AIzaSyBAceSg1tCTiK2W45dO9W2sjA924uT2oh8";
 
@@ -41,9 +47,7 @@ class AddressLocationController extends GetxController {
 
   //-- Region Init --//
   void init() async {
-    _addressModel.value =
-        await addressLocationRepository.getAddressLocation(userId);
-    ;
+    _addressModel.value = profileController.userInfo.value.address;
   }
 
   //-- End Region Init --//
@@ -95,6 +99,26 @@ class AddressLocationController extends GetxController {
     }
   }
 
+  void choosePredefinedLocation({required AddressLocationType type}) {
+    switch (type) {
+      case AddressLocationType.home:
+        if (_addressModel.value.homeLocation != null) {
+          setCurrentLatLng(_addressModel.value.homeLocation!);
+        } else {
+          Get.snackbar("Error", "No home location defined");
+        }
+        break;
+      case AddressLocationType.office:
+        if (_addressModel.value.officeLocation != null) {
+          setCurrentLatLng(_addressModel.value.officeLocation!);
+        } else {
+          Get.snackbar("Error", "No office location defined");
+        }
+        break;
+      default:
+    }
+  }
+
   //-- End Region Methods --//
 
   //-- Region Getter --//
@@ -118,6 +142,29 @@ class AddressLocationController extends GetxController {
     return listPlacemark[0];
   }
 
+  LatLng? getLatLngBySelectedAddressLocationType() {
+    switch (selectedAddressLocationType) {
+      case AddressLocationType.current:
+        return currentLatLng.value;
+      case AddressLocationType.home:
+        if (_addressModel.value.homeLocation != null) {
+          return _addressModel.value.homeLocation!;
+        } else {
+          Get.snackbar("Error", "No home location defined");
+          return null;
+        }
+      case AddressLocationType.office:
+        if (_addressModel.value.officeLocation != null) {
+          return _addressModel.value.officeLocation!;
+        } else {
+          Get.snackbar("Error", "No office location defined");
+          return null;
+        }
+      default:
+        return currentLatLng.value;
+    }
+  }
+
   //-- End Region Getter --//
 
   //-- Region Setter --//
@@ -139,6 +186,17 @@ class AddressLocationController extends GetxController {
 
   void setCurrentPlacemark(Placemark placemark) {
     currentPlacemark.value = placemark;
+  }
+
+  void addAddressLocation(
+      {LatLng? current, LatLng? home, LatLng? office}) async {
+    _addressModel.value = _addressModel.value.copyWith(
+      currentLocation: current,
+      homeLocation: home,
+      officeLocation: office,
+    );
+    await addressLocationRepository.setAddressLocation(
+        userId, _addressModel.value);
   }
 
   //-- End Region Setter --//

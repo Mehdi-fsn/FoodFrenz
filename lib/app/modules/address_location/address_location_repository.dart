@@ -6,6 +6,7 @@ class AddressLocationRepository {
 
   AddressLocationRepository({required this.cloudFirestoreProvider});
 
-  Future<AddressModel> getAddressLocation(String userId) async =>
-      await cloudFirestoreProvider.getAddressLocation(userId);
+  Future<void> setAddressLocation(
+          String userId, AddressModel addressModel) async =>
+      await cloudFirestoreProvider.setAddressLocation(userId, addressModel);
 }

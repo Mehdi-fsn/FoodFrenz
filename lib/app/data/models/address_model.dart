@@ -1,47 +1,46 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddressModel {
-  Position? homeLocation;
-  Position? officeLocation;
+  LatLng? currentLocation;
+  LatLng? homeLocation;
+  LatLng? officeLocation;
 
   AddressModel({
+    this.currentLocation,
     this.homeLocation,
     this.officeLocation,
   });
 
-  factory AddressModel.fromJson(Map<String, Map<String, dynamic>> map) {
+  factory AddressModel.fromJson(Map<String, dynamic> map) {
     return AddressModel(
-      homeLocation: map['homeLocation'] != null
-          ? Position(
-              latitude: map["homeLocation"]!["latitude"],
-              longitude: map["homeLocation"]!["longitude"],
-              timestamp: map["homeLocation"]!["timestamp"],
-              accuracy: 1,
-              altitude: 1,
-              heading: 1,
-              speed: 1,
-              speedAccuracy: 1,
-            )
-          : null,
-      officeLocation: map['officeLocation'] != null
-          ? Position(
-              latitude: map["officeLocation"]!["latitude"],
-              longitude: map["officeLocation"]!["longitude"],
-              timestamp: map["officeLocation"]!["timestamp"],
-              accuracy: 1,
-              altitude: 1,
-              heading: 1,
-              speed: 1,
-              speedAccuracy: 1,
-            )
-          : null,
+      currentLocation: LatLng.fromJson(map["currentLocation"]),
+      homeLocation: LatLng.fromJson(map["homeLocation"]),
+      officeLocation: LatLng.fromJson(map["officeLocation"]),
     );
   }
 
-  Map<String, Map<String, dynamic>> toJson() {
+  Map<String, dynamic> toJson() {
     return {
-      if (homeLocation != null) "homeLocation": homeLocation!.toJson(),
-      if (officeLocation != null) "officeLocation": officeLocation!.toJson(),
+      "currentLocation": latLngToList(currentLocation),
+      "homeLocation": latLngToList(homeLocation),
+      "officeLocation": latLngToList(officeLocation),
     };
+  }
+
+  List<double> latLngToList(LatLng? latLng) {
+    if (latLng == null) return [];
+    return [latLng.latitude, latLng.longitude];
+  }
+
+  AddressModel copyWith({
+    LatLng? currentLocation,
+    LatLng? homeLocation,
+    LatLng? officeLocation,
+  }) {
+    return AddressModel(
+      currentLocation: currentLocation ?? this.currentLocation,
+      homeLocation: homeLocation ?? this.homeLocation,
+      officeLocation: officeLocation ?? this.officeLocation,
+    );
   }
 }

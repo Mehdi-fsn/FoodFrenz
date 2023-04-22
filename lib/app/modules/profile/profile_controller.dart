@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodfrenz/app/core/utils/pick_image.dart';
+import 'package:foodfrenz/app/data/models/address_model.dart';
 import 'package:foodfrenz/app/data/models/user_info_model.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/modules/profile/profile_repository.dart';
@@ -15,8 +16,11 @@ class ProfileController extends GetxController {
   final String userId = Get.find<AuthenticationController>().user!.uid;
   final userChanges = Rx<User?>(null);
   final Rx<UserInfoModel> userInfo = UserInfoModel(
-          createdAt: DateTime.now(), address: {}, transactions: 0, spending: 0)
-      .obs;
+    createdAt: DateTime.now(),
+    address: AddressModel(),
+    transactions: 0,
+    spending: 0,
+  ).obs;
 
   @override
   void onReady() {

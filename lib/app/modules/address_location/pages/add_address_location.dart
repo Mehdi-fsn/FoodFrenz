@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
+import 'package:foodfrenz/app/data/enums.dart';
 import 'package:foodfrenz/app/modules/address_location/address_location_controller.dart';
 import 'package:foodfrenz/app/widgets/app_icon_widget.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,6 @@ class AddAddressLocation extends GetView<AddressLocationController> {
           Obx(
             () => GoogleMap(
               initialCameraPosition: controller.currentPosition,
-              myLocationButtonEnabled: controller.isLocationLoading.value,
               mapToolbarEnabled: false,
               compassEnabled: false,
               zoomControlsEnabled: false,
@@ -83,7 +83,9 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                   left: Dimensions.width10,
                   right: Dimensions.width10),
               child: FloatingActionButton.extended(
-                onPressed: () {},
+                onPressed: () {
+                  Get.dialog(const RadioDialogConfirmAddress());
+                },
                 label: const Text('Add address'),
                 icon: const Icon(Icons.add),
               ),
@@ -91,6 +93,99 @@ class AddAddressLocation extends GetView<AddressLocationController> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class RadioDialogConfirmAddress extends StatefulWidget {
+  const RadioDialogConfirmAddress({Key? key}) : super(key: key);
+
+  @override
+  State<RadioDialogConfirmAddress> createState() =>
+      _RadioDialogConfirmAddressState();
+}
+
+class _RadioDialogConfirmAddressState extends State<RadioDialogConfirmAddress> {
+  final AddressLocationController controller = Get.find();
+
+  AddressLocationType selectedAddressLocationType = AddressLocationType.current;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Confirm address :"),
+      content: Text(
+          '${controller.currentPlacemark.value!.street!}, ${controller.currentPlacemark.value!.locality!}, ${controller.currentPlacemark.value!.postalCode!}'),
+      actions: [
+        ListTile(
+          title: const Text('Current'),
+          leading: Radio(
+            value: AddressLocationType.current,
+            groupValue: selectedAddressLocationType,
+            onChanged: (value) {
+              setState(() {
+                selectedAddressLocationType = value!;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Home'),
+          leading: Radio(
+            value: AddressLocationType.home,
+            groupValue: selectedAddressLocationType,
+            onChanged: (value) {
+              setState(() {
+                selectedAddressLocationType = value!;
+              });
+            },
+          ),
+        ),
+        ListTile(
+          title: const Text('Office'),
+          leading: Radio(
+            value: AddressLocationType.office,
+            groupValue: selectedAddressLocationType,
+            onChanged: (value) {
+              setState(() {
+                selectedAddressLocationType = value!;
+              });
+            },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                switch (selectedAddressLocationType) {
+                  case AddressLocationType.current:
+                    controller.addAddressLocation(
+                        current: controller.currentLatLng.value);
+                    break;
+                  case AddressLocationType.home:
+                    controller.addAddressLocation(
+                        home: controller.currentLatLng.value);
+                    break;
+                  case AddressLocationType.office:
+                    controller.addAddressLocation(
+                        office: controller.currentLatLng.value);
+                    break;
+                }
+                Get.back();
+                Get.back();
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

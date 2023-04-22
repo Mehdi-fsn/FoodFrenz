@@ -75,16 +75,28 @@ class CloudFirestoreProvider {
     }
   }
 
-  Future<AddressModel> getAddressLocation(String userId) async {
+  Future<AddressModel> getUserAddress(String userId) async {
     final CollectionReference users = _firestore.collection('users');
     final DocumentReference userRef = users.doc(userId);
 
     final DocumentSnapshot userSnapshot = await userRef.get();
+
     final Map<String, dynamic> doc =
         userSnapshot.data()! as Map<String, dynamic>;
 
-    final AddressModel address = AddressModel.fromJson(doc['address']);
+    final AddressModel address = AddressModel.fromJson(doc["address"]);
     return address;
+  }
+
+  Future<void> setAddressLocation(String userId, AddressModel address) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    try {
+      await userRef.update({'address': address.toJson()});
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong when updating your address");
+    }
   }
 
   // -------- End Region User --------

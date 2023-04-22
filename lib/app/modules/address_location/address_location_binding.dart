@@ -8,7 +8,7 @@ class AddressLocationBinding extends Bindings {
     Get.lazyPut(
       () => AddressLocationRepository(cloudFirestoreProvider: Get.find()),
     );
-    Get.lazyPut(
-        () => AddressLocationController(addressLocationRepository: Get.find()));
+    Get.lazyPut(() => AddressLocationController(
+        addressLocationRepository: Get.find(), profileController: Get.find()));
   }
 }
