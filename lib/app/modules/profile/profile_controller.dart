@@ -7,6 +7,7 @@ import 'package:foodfrenz/app/data/models/user_info_model.dart';
 import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:foodfrenz/app/modules/profile/profile_repository.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ProfileController extends GetxController {
   final ProfileRepository profileRepository;
@@ -21,11 +22,13 @@ class ProfileController extends GetxController {
     transactions: 0,
     spending: 0,
   ).obs;
+  final Rx<LatLng?> deliveryAddress = Rx<LatLng?>(null);
 
   @override
   void onReady() {
     userChanges.bindStream(profileRepository.userChanges);
     userInfo.bindStream(profileRepository.getUser(userId));
+    setDeliveryAddress(userInfo.value.address.currentLocation);
     super.onReady();
   }
 
@@ -41,5 +44,9 @@ class ProfileController extends GetxController {
     final String imageUrl =
         await profileRepository.uploadProfileImage(userId, image);
     await updateUserAuthProfile(photoUrl: imageUrl);
+  }
+
+  void setDeliveryAddress(LatLng? latLng) {
+    deliveryAddress.value = latLng;
   }
 }

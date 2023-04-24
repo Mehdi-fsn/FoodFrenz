@@ -26,7 +26,7 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                   ? {controller.currentMarker.value!}
                   : {},
               onMapCreated: (GoogleMapController mapController) {
-                controller.setMapController(mapController);
+                controller.setSecondMapController(mapController);
               },
               onTap: (LatLng latLng) {
                 controller.setCurrentLatLng(latLng);
@@ -86,8 +86,19 @@ class AddAddressLocation extends GetView<AddressLocationController> {
                 onPressed: () {
                   Get.dialog(const RadioDialogConfirmAddress());
                 },
-                label: const Text('Add address'),
-                icon: const Icon(Icons.add),
+                label: Text(
+                  'Add address',
+                  style: TextStyle(
+                    color: Get.isDarkMode ? Colors.black54 : Colors.white,
+                  ),
+                ),
+                icon: Icon(
+                  Icons.add,
+                  color: Get.isDarkMode ? Colors.black54 : Colors.white,
+                ),
+                backgroundColor: Get.isDarkMode
+                    ? AppColors.mainDarkColor
+                    : AppColors.mainColor,
               ),
             ),
           ),
@@ -125,6 +136,7 @@ class _RadioDialogConfirmAddressState extends State<RadioDialogConfirmAddress> {
             onChanged: (value) {
               setState(() {
                 selectedAddressLocationType = value!;
+                controller.setSelectedAddressLocationType(value);
               });
             },
           ),
@@ -137,6 +149,7 @@ class _RadioDialogConfirmAddressState extends State<RadioDialogConfirmAddress> {
             onChanged: (value) {
               setState(() {
                 selectedAddressLocationType = value!;
+                controller.setSelectedAddressLocationType(value);
               });
             },
           ),
@@ -149,6 +162,7 @@ class _RadioDialogConfirmAddressState extends State<RadioDialogConfirmAddress> {
             onChanged: (value) {
               setState(() {
                 selectedAddressLocationType = value!;
+                controller.setSelectedAddressLocationType(value);
               });
             },
           ),
@@ -171,11 +185,13 @@ class _RadioDialogConfirmAddressState extends State<RadioDialogConfirmAddress> {
                     break;
                   case AddressLocationType.home:
                     controller.addAddressLocation(
-                        home: controller.currentLatLng.value);
+                        home: controller.currentLatLng.value,
+                        current: controller.currentLatLng.value);
                     break;
                   case AddressLocationType.office:
                     controller.addAddressLocation(
-                        office: controller.currentLatLng.value);
+                        office: controller.currentLatLng.value,
+                        current: controller.currentLatLng.value);
                     break;
                 }
                 Get.back();

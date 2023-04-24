@@ -35,12 +35,12 @@ class SettingsView extends GetView<ProfileController> {
         ),
         ListTile(
           leading: const Icon(Icons.location_on),
-          title: const Text('Address location'),
+          title: const Text('Delivery Address'),
           contentPadding: EdgeInsets.symmetric(
               vertical: Dimensions.height5, horizontal: Dimensions.width20),
           onTap: () {
             Get.to(
-              () => AddressLocationScreen(),
+              () => const AddressLocationScreen(),
               binding: AddressLocationBinding(),
             );
           },
