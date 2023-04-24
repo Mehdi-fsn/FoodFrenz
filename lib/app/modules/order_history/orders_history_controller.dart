@@ -24,4 +24,10 @@ class OrdersHistoryController extends GetxController {
     }
     return total;
   }
+
+  Future<void> changeStatusOrder(String orderId, int status) async {
+    int newStatus = status + 1;
+    if (newStatus > 2) newStatus = 0;
+    ordersHistoryRepository.changeStatusOrder(userId, orderId, newStatus);
+  }
 }

@@ -14,8 +14,10 @@ class NavigationController extends GetxController {
   int get currentIndex => _currentIndex.value;
 
   void changePage(int index) {
-    _currentIndex.value = index;
-    Get.toNamed(RoutePath.pages[index], id: 1);
+    if (index != _currentIndex.value) {
+      _currentIndex.value = index;
+      Get.toNamed(RoutePath.pages[index], id: 1);
+    }
   }
 
   Route onGenerateRoute(RouteSettings settings) {

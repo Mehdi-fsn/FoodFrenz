@@ -3,6 +3,8 @@ import 'package:foodfrenz/app/core/constant/constants.dart';
 import 'package:foodfrenz/app/core/theme/colors.dart';
 import 'package:foodfrenz/app/core/utils/dimensions.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:foodfrenz/app/data/models/user_info_model.dart';
+import 'package:foodfrenz/app/modules/profile/profile_controller.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/shopping_cart_controller.dart';
 import 'package:foodfrenz/app/modules/shopping_cart/widgets/shopping_cart_item_card.dart';
 import 'package:get/get.dart';
@@ -50,17 +52,25 @@ class ShoppingCartScreen extends GetView<ShoppingCartController> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: Dimensions.width10),
-              child: Obx(
-                () => ListView.builder(
-                  padding: EdgeInsets.only(top: Dimensions.height5),
-                  itemCount: controller.shoppingCart.length,
-                  itemBuilder: (_, int index) {
-                    final ShoppingCartItemModel item =
-                        controller.shoppingCart[index];
-                    return ShoppingCartItemCard(item: item);
-                  },
-                ),
-              ),
+              child: Obx(() => controller.shoppingCart.isNotEmpty
+                  ? ListView.builder(
+                      padding: EdgeInsets.only(top: Dimensions.height5),
+                      itemCount: controller.shoppingCart.length,
+                      itemBuilder: (_, int index) {
+                        final ShoppingCartItemModel item =
+                            controller.shoppingCart[index];
+                        return ShoppingCartItemCard(item: item);
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        'No items in the cart',
+                        style: TextStyle(
+                          fontSize: Dimensions.textSizeLarge,
+                          color: AppColors.paraColor,
+                        ),
+                      ),
+                    )),
             ),
           ),
           Container(
@@ -102,8 +112,26 @@ class ShoppingCartScreen extends GetView<ShoppingCartController> {
                     borderRadius: BorderRadius.circular(Dimensions.radius10),
                   ),
                   child: GestureDetector(
-                    onTap: () {
-                      controller.placeOrder();
+                    onTap: () async {
+                      if (controller.shoppingCart.isNotEmpty) {
+                        controller.placeOrder();
+
+                        final ProfileController profileController = Get.find();
+                        final UserInfoModel userInfo =
+                            profileController.userInfo.value;
+                        profileController
+                            .updateUserInfoProfile(userInfo.copyWith(
+                          spending: userInfo.spending +
+                              double.parse(controller.totalPrice),
+                          transactions: userInfo.transactions + 1,
+                        ));
+                      } else {
+                        Get.snackbar(
+                          'Empty Cart',
+                          'Please add items to your cart',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      }
                     },
                     child: Text(
                       "Check Out",

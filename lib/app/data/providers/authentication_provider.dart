@@ -70,6 +70,7 @@ class AuthenticationProvider {
 
   Future<void> createEmptyCollectionToNewUser() async {
     var userId = _firebaseAuth.currentUser!.uid;
+    await _cloudFirestoreProvider.createUser();
     await _cloudFirestoreProvider.createEmptyCart(userId);
     await _cloudFirestoreProvider.createEmptyOrderHistory(userId);
   }

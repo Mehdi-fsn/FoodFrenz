@@ -32,11 +32,11 @@ class MainScreen extends GetView<NavigationController> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.receipt_long_outlined),
-                label: Constants.order,
+                label: Constants.orderHistory,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart_outlined),
-                label: Constants.cart,
+                label: Constants.shoppingCart,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),

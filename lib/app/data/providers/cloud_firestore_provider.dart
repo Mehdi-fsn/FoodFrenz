@@ -1,12 +1,107 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:foodfrenz/app/data/models/address_model.dart';
 import 'package:foodfrenz/app/data/models/carte_item_model.dart';
 import 'package:foodfrenz/app/data/models/order_item_model.dart';
 import 'package:foodfrenz/app/data/models/shopping_cart_item_model.dart';
+import 'package:foodfrenz/app/data/models/user_info_model.dart';
+import 'package:foodfrenz/app/modules/authentication/authentication_controller.dart';
 import 'package:get/get.dart';
 
 class CloudFirestoreProvider {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // -------- Region User --------
+  Future<void> createUser() async {
+    final User user = Get.find<AuthenticationController>().user!;
+    final isExists = await isUserExists(user.uid);
+    if (!isExists) {
+      CollectionReference users = _firestore.collection('users');
+      await users.doc(user.uid).set({
+        'createdAt': Timestamp.now(),
+        'address': {},
+        'transactions': 0,
+        'spending': 0,
+      });
+    }
+  }
+
+  Future<bool> isUserExists(String userId) async {
+    DocumentSnapshot documentSnapshot =
+        await _firestore.collection('users').doc(userId).get();
+    return documentSnapshot.exists;
+  }
+
+  Stream<UserInfoModel> getUser(String userId) {
+    return _firestore.collection('users').doc(userId).snapshots().map(
+      (doc) {
+        return UserInfoModel.fromJson(doc.data()!, userId: doc.id);
+      },
+    );
+  }
+
+  Stream<User?> get userChanges => FirebaseAuth.instance.userChanges();
+
+  Future<void> updateUserAuthProfile(
+      String? displayName, String? email, String? photoUrl) async {
+    final User user = FirebaseAuth.instance.currentUser!;
+    try {
+      if (displayName != null) {
+        await user.updateDisplayName(displayName);
+      }
+      if (email != null) {
+        await user.updateEmail(email);
+      }
+      if (photoUrl != null) {
+        await user.updatePhotoURL(photoUrl);
+      }
+      Get.snackbar("Success", "Your profile has been updated");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> updateUserInfoProfile(String userId, UserInfoModel user) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    try {
+      await userRef.update(user.toJson());
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<AddressModel> getUserAddress(String userId) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    final DocumentSnapshot userSnapshot = await userRef.get();
+
+    final Map<String, dynamic> doc =
+        userSnapshot.data()! as Map<String, dynamic>;
+
+    final AddressModel address = AddressModel.fromJson(doc["address"]);
+    return address;
+  }
+
+  Future<void> setAddressLocation(String userId, AddressModel address) async {
+    final CollectionReference users = _firestore.collection('users');
+    final DocumentReference userRef = users.doc(userId);
+
+    try {
+      await userRef.update({'address': address.toJson()});
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong when updating your address");
+    }
+  }
+
+  // -------- End Region User --------
+
+  // -------- Region Carte --------
   Stream<List<CarteItemModel>> getAppetizers() {
     return _firestore.collection('appetizers').snapshots().map((querySnapshot) {
       return querySnapshot.docs.map(
@@ -40,17 +135,9 @@ class CloudFirestoreProvider {
     });
   }
 
-  // Shopping Cart
-  Stream<List<ShoppingCartItemModel>> getCart(String userId) {
-    return _firestore.collection('carts').doc(userId).snapshots().map((doc) {
-      return doc.get('items').map<ShoppingCartItemModel>(
-        (item) {
-          return ShoppingCartItemModel.fromJson(item);
-        },
-      ).toList();
-    });
-  }
+  // -------- End Region Carte --------
 
+  // -------- Region Shopping Cart --------
   Future<void> createEmptyCart(String userId) async {
     bool exists = await checkIfCartExists(userId);
     if (!exists) {
@@ -63,6 +150,16 @@ class CloudFirestoreProvider {
     DocumentSnapshot cart =
         await _firestore.collection('carts').doc(userId).get();
     return cart.exists;
+  }
+
+  Stream<List<ShoppingCartItemModel>> getCart(String userId) {
+    return _firestore.collection('carts').doc(userId).snapshots().map((doc) {
+      return doc.get('items').map<ShoppingCartItemModel>(
+        (item) {
+          return ShoppingCartItemModel.fromJson(item);
+        },
+      ).toList();
+    });
   }
 
   Future<void> addToCart(String userId, ShoppingCartItemModel item) async {
@@ -132,7 +229,34 @@ class CloudFirestoreProvider {
     }
   }
 
-  // Orders
+  Future<void> clearCart(String userId) async {
+    CollectionReference carts = _firestore.collection('carts');
+    DocumentReference cartRef = carts.doc(userId);
+
+    try {
+      await cartRef.update({'items': []});
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to clear cart');
+    }
+  }
+
+  // -------- End Region Shopping Cart --------
+
+  // -------- Region Orders --------
+  Future<void> createEmptyOrderHistory(String userId) async {
+    bool exists = await checkIfOrdersHistoryExists(userId);
+    if (!exists) {
+      CollectionReference carts = _firestore.collection('orders');
+      await carts.doc(userId).set({'orders': []});
+    }
+  }
+
+  Future<bool> checkIfOrdersHistoryExists(String userId) async {
+    DocumentSnapshot order =
+        await _firestore.collection('orders').doc(userId).get();
+    return order.exists;
+  }
+
   Stream<List<OrderItemModel>> getOrdersHistory(String userId) {
     return _firestore.collection('orders').doc(userId).snapshots().map((doc) {
       return doc.get('orders').map<OrderItemModel>(
@@ -161,17 +285,49 @@ class CloudFirestoreProvider {
     }
   }
 
-  Future<void> createEmptyOrderHistory(String userId) async {
-    bool exists = await checkIfOrdersHistoryExists(userId);
-    if (!exists) {
-      CollectionReference carts = _firestore.collection('orders');
-      await carts.doc(userId).set({'orders': []});
+  Future<void> changeStatusOrder(
+      String userId, String orderId, int status) async {
+    CollectionReference orders = _firestore.collection('orders');
+    DocumentReference orderRef = orders.doc(userId);
+
+    DocumentSnapshot orderSnapshot = await orderRef.get();
+
+    try {
+      List<dynamic> existingOrders = orderSnapshot.get('orders');
+      var orderIndex =
+          existingOrders.indexWhere((element) => element['id'] == orderId);
+      existingOrders[orderIndex]['status'] = status;
+      await orderRef.update({
+        'orders': existingOrders,
+      });
+      switch (status) {
+        case 0:
+          Get.snackbar('Success', 'Order has been successfully cancelled');
+          break;
+        case 1:
+          Get.snackbar('Success', 'Order is awaiting delivery');
+          break;
+        case 2:
+          Get.snackbar('Success', 'Order has been successfully delivered');
+          break;
+      }
+    } on FirebaseException catch (_) {
+      Get.snackbar("Error", 'Failed to update order');
     }
   }
 
-  Future<bool> checkIfOrdersHistoryExists(String userId) async {
-    DocumentSnapshot order =
-        await _firestore.collection('orders').doc(userId).get();
-    return order.exists;
+  // -------- End Region Orders --------
+
+  // -------- Region Firebase Storage --------
+  Future<String> uploadProfileImage(String userId, File? image) async {
+    if (image == null) return '';
+
+    Reference reference =
+        FirebaseStorage.instance.ref().child('avatar/$userId.jpg');
+    UploadTask uploadTask = reference.putFile(image);
+
+    TaskSnapshot taskSnapshot = await uploadTask;
+    return await taskSnapshot.ref.getDownloadURL();
   }
+// -------- End Region Firebase Storage --------
 }

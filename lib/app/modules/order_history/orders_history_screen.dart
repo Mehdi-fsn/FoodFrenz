@@ -45,15 +45,24 @@ class OrdersHistoryScreen extends GetView<OrdersHistoryController> {
             ),
           ),
           Expanded(
-            child: Obx(
-              () => ListView.builder(
-                padding: EdgeInsets.only(top: Dimensions.height5),
-                itemCount: controller.ordersHistory.length,
-                itemBuilder: (_, int index) {
-                  return OrderItemCard(item: controller.ordersHistory[index]);
-                },
-              ),
-            ),
+            child: Obx(() => controller.ordersHistory.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.only(top: Dimensions.height5),
+                    itemCount: controller.ordersHistory.length,
+                    itemBuilder: (_, int index) {
+                      return OrderItemCard(
+                          item: controller.ordersHistory[index]);
+                    },
+                  )
+                : Center(
+                    child: Text(
+                      Constants.noOrdersYet,
+                      style: TextStyle(
+                        color: AppColors.paraColor,
+                        fontSize: Dimensions.textSizeLarge,
+                      ),
+                    ),
+                  )),
           ),
         ],
       ),
